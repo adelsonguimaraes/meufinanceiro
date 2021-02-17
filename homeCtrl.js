@@ -3,7 +3,5 @@ angular.module(module).controller('homeCtrl', function ($rootScope, $scope, auth
     if (!$rootScope.usuario) { $location.path("/login"); return false; }
 
     $scope.title = 'Home';
-
-    console.log($rootScope.usuario);
     
 });

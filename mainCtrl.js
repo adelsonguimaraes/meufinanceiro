@@ -34,7 +34,7 @@ angular.module(module).controller('mainCtrl', function ($rootScope, $scope, auth
         {
             'nome': 'Meta',
             'icon': 'fa fa-heart',
-            'url': 'cartacredito'
+            'url': 'meta'
         },
     ];
 
