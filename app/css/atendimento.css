@@ -1,0 +1,157 @@
+.main-atendimento {
+    position: relative;
+    /* background-image: url(../../libs/img/background.jpg); */
+    background-image: url(../../libs/img/background2.jpg);
+    background-size: cover;
+    /* background-color: rgb(19, 19, 19); */
+    height: 100vh;
+    overflow: auto;
+}
+
+.main-atendimento section {
+    padding: 10px;
+    margin: 5px auto;
+    background-color: rgba(239, 233, 255, 0.966);
+    text-align: center;
+    border: 1px solid #958ea7;
+    width: 95%;
+}
+
+/* consultor */
+.main-atendimento .consultor {
+    /* padding: 10px;
+    margin: 10px;
+    background-color: rgba(239, 233, 255, 0.966); */
+    /* display: flex; */
+    /* text-align: center; */
+}
+.main-atendimento .profile {
+    width: 120px;
+    height: 120px;
+    border-radius: 100px;
+    overflow: hidden;
+    margin: 0 auto;
+    box-shadow: 1px 2px 4px 2px #505050;
+}
+.main-atendimento .profile img {
+    max-width: 100%;
+}
+.main-atendimento .consultor div .info {
+    padding: 10px;
+    /* width: 70%; */
+}
+.main-atendimento .consultor div .nome {
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    color: black;
+    display: block;
+}
+.main-atendimento .consultor div .cargo {
+    text-decoration: none;
+    color: rgba(56, 55, 55, 0.829);
+    display: block;
+    font-weight: 600;
+}
+.main-atendimento .consultor div .celular {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    background: maroon;
+    font-weight: bold;
+    display: block;
+}
+.main-atendimento .consultor div .celular i {
+    font-size: 18px;
+}
+
+/* Simulacao */
+.main-atendimento .simulacao {
+    /* padding: 10px;
+    text-align: center;
+    margin: 10px;
+    background: rgba(239, 233, 255, 0.904); */
+}
+.main-atendimento .simulacao a {
+    width: 100px;
+    padding: 15px;
+    margin: 2px;
+}
+.main-atendimento .simulacao i {
+    color: black;
+    font-size: 35px;
+    display: block;
+    font-weight: bold;
+}
+
+/*informativos*/
+.main-atendimento .informativos {
+    /* padding: 10px;
+    text-align: center;
+    margin: 10px;
+    background: rgba(239, 233, 255, 0.904); */
+}
+.main-atendimento .informativos a {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    background: maroon;
+    font-weight: bold;
+}
+
+/*localizacao*/
+.main-atendimento .localizacao {
+    /* padding: 10px;
+    text-align: center;
+    margin: 10px;
+    background: rgba(239, 233, 255, 0.904); */
+}
+.main-atendimento .localizacao .endereco {
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    display: block;
+    font-weight: bold;
+    padding: 5px;
+    /* margin: 5px; */
+}
+.main-atendimento .localizacao .como-chegar {
+    display: block;
+    margin: 5px;
+}
+.main-atendimento .localizacao .como-chegar a {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    background: maroon;
+    font-weight: bold;
+}
+
+/*social*/
+.main-atendimento .social {
+    /* padding: 10px;
+    text-align: center;
+    margin: 10px;
+    background: rgba(239, 233, 255, 0.904); */
+}
+.main-atendimento .social a {
+    background: #fff;
+    font-size: 16px;
+}
+.main-atendimento .social i {
+    font-size: 30px;
+    display: block;
+}
+/* .main-atendimento .irs, .irs-with-grid {
+    background: #fff !important;
+} */
+/* .main-atendimento .irs-slider{
+    
+} */
+
+@media (min-width: 1020px) {
+    .main-atendimento section {
+        margin: 20px auto;
+        width: 80%;
+    }
+    .main-atendimento .consultor div .celular {
+        display: inline-grid;
+    }
+}

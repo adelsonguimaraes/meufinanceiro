@@ -1,0 +1,29 @@
+.logo-sistema {
+    width: 100%;
+    /* overflow: hidden; */
+    padding: 15px;
+    text-align: center;
+}
+.logo-sistema .profile {
+    border-radius: 100%;
+    overflow: hidden;
+    height: 200px;
+    width: 200px;
+    margin: 0 auto;
+    text-align: center;
+    position: relative;
+}
+.logo-sistema img {
+    height: 200px;
+    margin-left:auto;
+    margin-right:auto;
+    position: absolute;
+    left: 0;
+}
+.boas-vindas {
+    width: 100%;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    font-size: 25px;
+}

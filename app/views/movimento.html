@@ -1,0 +1,112 @@
+<div class="box">
+    <div ng-include="'app/views/common/header.html'"></div>
+    <section ng-if="!novo" style="background: rgb(255 255 255 / 65%);">
+        <div style="display: flex;">
+            <button class="btn btn-default" ng-click="cadNovo()"><i class="fa fa-plus"></i></button>
+            <input type="text" class="form-control" ng-model="filtro" placeholder="Filtro">
+            <input type="tel" class="form-control" ng-model="pagination.limit" style="width:50px;" so-numeros>
+            <button class="btn btn-default" ng-click="filtrar()"><i class="fa fa-filter"></i></button>
+            <button class="btn btn-default" ng-click="listarClientes()"><i class="fa fa-refresh"></i></button>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('id')">ID</i></span></td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('nome')">Nome</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('descricao')">Descrição</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('valor_mensal')">Valor Mensal</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('quantidade_parcelas')">Parcelas</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('data_inicial')">Vencimento</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('tipo')">Tipo</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('ativo')">Ativo</td>
+                        <td align="left">Ações</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="obj in movimentos | filter:filtro | orderBy:ordenador:reverse">
+                        <td>{{obj.id}}</td>
+                        <td>{{obj.nome}}</td>
+                        <td>{{obj.descricao}}</td>
+                        <td>{{obj.valor_mensal | moeda}}</td>
+                        <td>{{((obj.quantidade_parcela<=0) ? 'FIXO' : obj.quantidade_parcela)}}</td>
+                        <td>{{obj.data_inicial | data}}</td>
+                        <td>{{obj.tipo}}</td>
+                        <td>{{obj.ativo}}</td>
+                        <td>
+                            <button class="btn btn-warning" ng-click="editar(obj)"><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-danger"  ng-click="remover(obj)"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <section style="padding:10px;" ng-if="novo">
+        <!-- <h3 align="center">Novo Cadastro</h3> -->
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">Formulário de movimento</div>
+                </div>
+                <div class="panel-body">
+                    <form name="formCartao" class="form-horizontal">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="nome">Nome <span class="importante">*</span></label>
+                                <input type="text" class="form-control" name="nome" ng-model="obj.nome" placeholder="Qual o nome do movimento?" ng-required="true">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="valor_mensal">Valor <span class="importante">*</span></label>
+                                <input type="tel" class="form-control" name="valor_mensal" ng-model="obj.valor_mensal" mascara-moeda placeholder="Quanto custa por mês?" ng-required="true">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label for="descricao">Descrição</label>
+                                <input type="text" class="form-control" name="descricao" ng-model="obj.descricao" placeholder="Descreva seu movimento de forma clara" ng-required="false">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="quantidade_parcela">Parcelas <span class="importante">*</span></label>
+                                <select name="quantidade_parcela" class="form-control" ng-model="obj.quantidade_parcela" ng-options="obj for obj in parcelas" ng-required="true">
+                                    <option value="">Selecione as parcelas</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="dia_vencimento">Data Inicial <span class="importante">*</span></label>
+                                <input type="date" class="form-control" ng-model="obj.data_inicial" ng-required="true">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="tipo">Tipo <span class="importante">*</span></label>
+                                <select name="tipo" class="form-control" ng-model="obj.tipo" ng-required="true">
+                                    <option value="">Selecione o tipo</option>
+                                    <option value="RECEBIMENTO">RECEBIMENTO</option>
+                                    <option value="PAGAMENTO">PAGAMENTO</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="idcartao">Cartão <span class="importante">*</span></label>
+                                <select name="idcartao" class="form-control" ng-model="obj.idcartao" ng-options="obj.id as (obj.nome + ' - ' + obj.final) for obj in cartoes" ng-required="true">
+                                    <option value="">Selecione o cartão</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="btn-group pull-right" style="padding: 15px 0;">
+                                    <button type="button" class="btn btn-danger" ng-click="cancelar()">Cancelar</button>
+                                    <button type="button" class="btn btn-success" ng-click="salvar(obj)" ng-disabled='formCartao.$invalid'>Salvar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

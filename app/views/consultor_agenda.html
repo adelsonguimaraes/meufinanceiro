@@ -1,0 +1,34 @@
+<div ng-controller="consultor_agendaCtrl">
+    <section>
+        <div style="display: flex;">
+            <input type="text" class="form-control" placeholder="Filtro">
+            <input type="text" class="form-control" style="width:50px;" value="20">
+            <button class="btn btn-default"><i class="fa fa-filter"></i></button>
+            <button class="btn btn-default" ng-click="listarAgendas()"><i class="fa fa-refresh"></i></button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <td align="left">Data</td>
+                        <td align="left">Horário</td>
+                        <td align="left">Cliente</td>
+                        <td align="left">Tipo</td>
+                        <td align="left">Observação</td>
+                        <!-- <td align="left">Ações</td> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="obj in agendas">
+                        <td>{{obj.datahora | data}}</td>
+                        <td>{{obj.datahora | hora}}</td>
+                        <td>{{obj.cliente}}</td>
+                        <td>{{obj.tipo}}</td>
+                        <td>{{obj.observacao}}</td>
+                        <!-- <td>{{obj.acoes}}</td> -->
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>

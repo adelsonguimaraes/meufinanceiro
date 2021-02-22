@@ -1,0 +1,84 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">Agenda</h4>
+        <small>Informações do Agendamento</small>
+    </div>
+    <div class="modal-body">
+        <form name="simulacaoForm">
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Sobre a Agenda</h3>
+                    <hr>        	
+                    <div class="row">
+            			<div class="col-sm-6">
+                            <label>Data e Horário</label>
+                            <input class="form-control" type="text" name="data" value="{{obj.datahora | datahora}}" readonly="true">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Tipo</label>
+                            <input class="form-control" type="text" name="tipo" value="{{obj.tipo}}" readonly="true">
+                        </div>
+    				</div>
+            		<div class="row">
+            			<div class="col-sm-12">
+                            <label>Observação da Agenda</label>
+                            <textarea  class="form-control" name="observacao" id="" cols="10" rows="6" readonly="true">{{obj.observacao}}</textarea>
+                        </div>
+    				</div>
+        			<h3>Sobre o Cliente</h3>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label>Nome</label>
+                            <input class="form-control" type="text" name="nomecliente" value="{{obj.cliente}}" readonly="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Celular</label>
+                            <a href="tel:{{obj.clientecelular}}" style="display:grid; grid-template-columns: 40px auto; text-decoration: none;">
+                                <button class="btn btn-primary"><i class="fa fa-phone"></i></button>
+                                <input class="form-control" type="text" name="celularcliente" value="{{obj.clientecelular | cel}}" readonly="true">
+                            </a>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Status</label>
+                            <input class="form-control" type="text" name="statuscliente" value="{{obj.clientestatus}}" readonly="true">
+                        </div>
+                    </div>
+                    <h3>Interesse do Cliente</h3>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Interesse</label>
+                            <input class="form-control" type="text" name="clienteinteresse" value="{{obj.clienteinteresse}}" readonly="true">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Valor</label>
+                            <input class="form-control" type="text" name="clientevalor" value="{{obj.clientevalor}}" readonly="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Entrada</label>
+                            <input class="form-control" type="text" name="clienteentrada" value="{{obj.clienteentrada}}" readonly="true">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Parcela</label>
+                            <input class="form-control" type="text" name="clienteparcela" value="{{obj.clienteparcela}}" readonly="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label>Observação do cliente</label>
+                            <textarea class="form-control" name="clienteobservacao" id="" cols="10" rows="6" readonly="true">{{obj.clienteobservacao}}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-danger" ng-click="ok(obj)">Fechar</button>
+    </div>
+</div>

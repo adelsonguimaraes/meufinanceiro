@@ -1,0 +1,88 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">Simulação</h4>
+        <small>Modalidade: {{obj.modalidade}}</small>
+    </div>
+    <div class="modal-body">
+        <form name="simulacaoForm">
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- <h3>
+                        Cliente
+                    </h3>
+                    <small>* Selecione um cliente caso queirar salvar a simulação</small>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <select class="form-control" name="cliente" ng-model="obj.idcliente" ng-options="obj.id as obj.nome for obj in clientes"></select>
+                        </div>
+                    </div> -->
+                    <h3>Valores da Carta</h3>
+                    <hr>
+                    <div class="row">
+            			<div class="col-sm-6">
+                            <label>Valor</label>
+                            <input class="form-control" type="tel" mascara-moeda name="valor" ng-model="obj.valor" readonly="true">
+                        </div>
+                        <div class="col-sm-6">
+                            <!-- <label>Entrada</label> -->
+                            <label>Inclusão</label>
+                            <input class="form-control" type="tel" mascara-moeda name="inclusao" ng-model="obj.inclusao" readonly="true">
+                        </div>
+    				</div>
+            		<div class="row">
+            			<div class="col-sm-4">
+                            <label>Parcela</label>
+                            <input class="form-control" type="tel" mascara-moeda name="parcela" ng-model="obj.parcela" readonly="true">
+                        </div>
+                        <div class="col-sm-4">
+                            <label>Entrada</label>
+                            <input class="form-control" type="tel" mascara-moeda name="entrada" ng-model="obj.entrada" readonly="true">
+                        </div>
+                        <div class="col-sm-4">
+                            <label>Taxa</label>
+                            <input class="form-control" type="tel" name="taxa" ng-model="obj.taxa" readonly="true">
+                        </div>
+    				</div>
+        			<h3>Valor Negociado</h3>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Valor Negociado</label>
+                            <input class="form-control" type="tel" mascara-moeda name="valornegociado" ng-keyup="alteraValor(obj, $event)" ng-model="obj.valornegociado">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Valor Total (Negociado + Taxa)</label>
+                            <input class="form-control" type="tel" mascara-moeda name="valorcomtaxa" ng-model="obj.valorcomtaxa" readonly="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Valor Final (Total - Entrada)</label>
+                            <input class="form-control" type="tel" mascara-moeda name="valorfinal" ng-model="obj.valorfinal" readonly="true">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Parcelamento (Final / Parcela)</label>
+                            <input class="form-control" type="tel" name="parcelamento" ng-model="obj.parcelamento" readonly="true">
+                        </div>
+                    </div>
+                    <h3>
+                        Valores do Consultor
+                        <small>Ocultar</small> <input type="checkbox" name="ocultar" id="ocultar" ng-model="obj.ocultar" checked>
+                    </h3> 
+                    <hr>
+                    <div class="row" ng-if="!obj.ocultar">
+                        <div class="col-sm-12">
+                            <label>Valor (Valor Carta + 0.7%)</label>
+                            <input class="form-control" type="tel" mascara-moeda name="valorconsultor" ng-model="obj.valorconsultor" readonly="true">
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancelar</button>
+        <button type="button" class="btn btn-danger" ng-click="ok(obj)">Salvar</button>
+    </div>
+</div>

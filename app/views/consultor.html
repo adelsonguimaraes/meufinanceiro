@@ -1,0 +1,70 @@
+<div ng-include="'app/views/common/header.html'"></div>
+<div class="sub-menu" ng-if="!novo">
+    <div class="filtro">
+        <div class="btn-group">
+            <button type="submit" class="btn btn-default" ng-click="novoCadastro()" ng-disabled="view.length>0">
+                <i class=" fa fa-plus"></i>
+            </button>
+            <button type="submit" class="btn btn-default" ng-click="editar(obj.consultor)" ng-disabled="view.length>0">
+                <i class=" fa fa-edit"></i>
+            </button>
+        </div>
+        <div>
+            <select class="form-control" name="consultor" ng-options="obj as obj.id + '. ' +obj.nome for obj in consultores" ng-model="obj.consultor" ng-disabled="view.length>0"></select>
+        </div>
+        <div>
+            <select class="form-control" name="alvo" ng-model="obj.alvo" ng-disabled="view.length>0">
+                <option value="cliente">Clientes</option>
+                <option value="agenda">Agendas</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit" class="btn btn-info" ng-click="filtrar(obj)" ng-if="view.length<=0">
+                <i class="fa fa-search"></i>
+            </button>
+            <button type="submit" class="btn btn-danger" ng-click="limparFiltro(obj)" ng-if="view.length>0">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+    </div>
+</div>
+<section style="padding:10px;background: #fff;border-radius: 5px;" ng-if="novo">
+    <form name="formCad" class="form">
+        <div class="row">
+            <div class="col-sm-4">
+                <label for="email">Email</label>
+                <input class="form-control" type="email" name="email" ng-model="objcad.email" placeholder="Informe o email do consultor" ng-required="true">
+            </div>
+            <div class="col-sm-4">
+                <label for="nome">Nome</label>
+                <input class="form-control" type="text" name="nome" ng-model="objcad.nome" placeholder="Informe o nome do consultor" ng-required="true">
+            </div>
+            <div class="col-sm-4">
+                <label for="nome">Porcentagem</label>
+                <input class="form-control" type="tel" name="porcentagem" mascara-moeda ng-model="objcad.porcentagem" placeholder="Informe a porcentagem do consultor"
+                    ng-required="true">
+            </div>
+        </div>
+        <div style="margin:10px;padding:15px; text-align: center; border: 1px solid #cccccc;background: bisque;" ng-if="objcad.id>0">
+            <br>
+            <button class="btn btn-default" ng-click="desativar(objdes, objcad)">Desativar Usuário</button>
+            <h4>Importar Dados?<br><small>Clientes e Agendas</small></h4>
+            <label for="">Sim</label>
+            <input type="radio" name="importar" id="importar" ng-model="objdes.importar" value="SIM">
+            <label for="">Não</label>
+            <input type="radio" name="importar" id="importar" ng-model="objdes.importar" value="NAO">
+        </div>
+        <br/>
+        <div style="display: inline-block; width: 100%;">
+            <div class="btn-group pull-right">
+                <button class="btn btn-danger" ng-click="cancelar()">Cancelar</button>
+                <button class="btn btn-success" ng-click="salvar(objcad)" ng-disabled="formCad.$invalid">Salvar</button>
+            </div>
+        </div>
+    </form>
+    <br/>
+    <div style="color:rgb(172, 30, 30);">OBS: A senha padrão dos usuários é <b>incubus@123</b></div>
+</section>
+<section>
+    <div ng-include="view"></div>
+</section>

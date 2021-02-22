@@ -1,0 +1,17 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title" ng-bind-html="infos[info].header"></h4>
+        <small  ng-bind-html="infos[info].small"></small>
+    </div>
+    <div class="modal-body">
+        <section>
+            <h3 ng-bind-html="infos[info].title"></h3>
+            <br>
+            <p ng-bind-html="infos[info].body">
+            </p>
+        </section>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Fechar</button>
+    </div>
+</div>

@@ -1,0 +1,94 @@
+<div class="box">
+    <div ng-include="'app/views/common/header.html'"></div>
+    <section ng-if="!novo" style="background: rgb(255 255 255 / 65%);">
+        <div style="display: flex;">
+            <button class="btn btn-default" ng-click="cadNovo()"><i class="fa fa-plus"></i></button>
+            <input type="text" class="form-control" ng-model="filtro" placeholder="Filtro">
+            <input type="tel" class="form-control" ng-model="pagination.limit" style="width:50px;" so-numeros>
+            <button class="btn btn-default" ng-click="filtrar()"><i class="fa fa-filter"></i></button>
+            <button class="btn btn-default" ng-click="listarClientes()"><i class="fa fa-refresh"></i></button>
+        </div>
+        
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('id')">ID</i></span></td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('nome')">Nome</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('bandeira')">Bandeira</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('validade')">Validade</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('final')">Final</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('dia_vencimento')">Vencimento</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('ativo')">Ativo</td>
+                        <td align="left">Ações</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="obj in cartoes | filter:filtro | orderBy:ordenador:reverse">
+                        <td>{{obj.id}}</td>
+                        <td>{{obj.nome}}</td>
+                        <td>{{obj.bandeira}}</td>
+                        <td>{{obj.validade}}</td>
+                        <td>{{obj.final}}</td>
+                        <td>{{obj.dia_vencimento}}</td>
+                        <td>{{obj.ativo}}</td>
+                        <td>
+                            <button class="btn btn-warning" ng-click="editar(obj)"><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-danger"  ng-click="remover(obj)"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <section style="padding:10px;" ng-if="novo">
+        <!-- <h3 align="center">Novo Cadastro</h3> -->
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">Formulário de cartão</div>
+                </div>
+                <div class="panel-body">
+                    <form name="formCartao" class="form-horizontal">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="nome">Nome <span class="importante">*</span></label>
+                                <input type="text" class="form-control" name="nome" ng-model="obj.nome" ng-required="true">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="bandeira">Bandeira <span class="importante">*</span></label>
+                                <select name="idbandeira" class="form-control" ng-model="obj.idbandeira" ng-options="obj.id as obj.nome for obj in bandeiras" ng-required="true">
+                                    <option value="">Selecione a bandeira</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label for="validade">Validade <span class="importante">*</span></label>
+                                <input type="month" class="form-control" name="validade" ng-model="obj.validade" ng-required="true">
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="final">Final <span class="importante">*</span></label>
+                                <input type="text" class="form-control" name="final" ng-model="obj.final" ng-required="true">
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="dia_vencimento">Dia Vencimento <span class="importante">*</span></label>
+                                <select name="dia_vencimento" class="form-control" ng-model="obj.dia_vencimento" ng-options="obj for obj in dias_vencimento" ng-required="true">
+                                    <option value="">Selecione o dia</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="btn-group pull-right" style="padding: 15px 0;">
+                                    <button type="button" class="btn btn-danger" ng-click="cancelar()">Cancelar</button>
+                                    <button type="button" class="btn btn-success" ng-click="salvar(obj)" ng-disabled='formCartao.$invalid'>Salvar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,48 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">Filtro de Clientes</h4>
+        <small class="font-bold">Filtro avançado para clientes</small>
+    </div>
+    <div class="modal-body">
+        <form name="formFilter" ng-submit="ok(obj)">
+            <div class="row">
+            	<div class="col-md-12">
+					<div class="row">
+						<div class="col-sm-12">
+							<label for="nome">Nome</label>
+							<input type="text" class="form-control" name="nome" ng-model="obj.nome" placeholder="Nome do cliente">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<label for="celular">Celular</label>
+							<input type="tel" class="form-control" name="celular" ng-model="obj.celular" placeholder="Celular do cliente">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<label for="status">Status</label>
+							<select class="form-control" name="status" id="status" ng-model="obj.status" ng-required="true">
+								<option value="TODOS">Todos</option>
+								<option value="PROSPECTO">Prospecto</option>
+								<option value="RETORNO">Retorno</option>
+								<option value="DEFINITIVO">Definitivo</option>
+								<option value="DESISTENTE">Desistente</option>
+							</select>
+            			</div>
+    				</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<label for="interesse">Interesse</label>
+							<input type="text" class="form-control" name="interesse" ng-model="obj.interesse" placeholder="Qual o interesse do cliente?">
+						</div>
+					</div>
+    			</div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancelar</button>
+        <button type="button" class="btn btn-danger" ng-click="ok(obj)">Filtrar</button>
+    </div>
+</div>

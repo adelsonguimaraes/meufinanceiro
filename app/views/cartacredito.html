@@ -1,0 +1,76 @@
+<div class="">
+    <div ng-include="'app/views/common/header.html'"></div>
+    <section ng-if="!novo">
+        <div style="display: flex;">
+            <button class="btn btn-default" ng-click="cadNovo()"><i class="fa fa-plus"></i></button>
+            <div style="width:100%;"></div>
+            <button class="btn btn-default" ng-click="filtrar()" title="Filtro"><i class="fa fa-filter"></i></button>
+            <button class="btn btn-default" ng-click="listarCartas()" title="Limpar Filtro"><i class="fa fa-ban"></i></button>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <td align="left">ID</td>
+                        <td align="left">Modalidade</td>
+                        <td align="left">Valor</td>
+                        <td align="left">Efetivo</td>
+                        <td align="left">Entrada</td>
+                        <td align="left">Parcela</td>
+                        <td align="left">Taxa</td>
+                        <td align="left">Ações</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="obj in cartas">
+                        <td>{{obj.id}}</td>
+                        <td>{{obj.modalidade}}</td>
+                        <td align="right">{{obj.valor | moeda}}</td>
+                        <td align="right">{{obj.efetivo}}</td>
+                        <td align="right">{{obj.entrada | moeda}}</td>
+                        <td align="right">{{obj.parcela | moeda}}</td>
+                        <td align="right">{{obj.taxa}}%</td>
+                        <td>
+                            <button class="btn btn-warning" ng-click="editar(obj)"><i class="fa fa-pencil"></i></button>
+                            <button class="btn btn-danger"  ng-click="simular(obj)"><i class="fa fa-calculator"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    <section style="padding:10px;" ng-if="novo">
+        <h3 align="center">Novo Cadastro</h3>
+        <div class="row">
+            <div class="col-md-12">
+                <form class="form" name="formCad">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Taxa</label>
+                            <select class="form-control" ng-options="obj.id as obj.codigo group by obj.modalidade for obj in taxas" ng-model="obj.idtaxaadministrativa"></select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Valor</label>
+                            <input type="tel" class="form-control"  name="valor" id="valor" mascara-moeda ng-model="obj.valor" ng-required="true">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label>Entrada</label>
+                            <input type="tel" class="form-control" name="entrada" id="entrada" mascara-moeda ng-model="obj.entrada" ng-required="true">
+                        </div>
+                        <div class="col-sm-6">
+                            <label>Parcela</label>
+                            <input type="tel" class="form-control" name="parcela" id="parcela" mascara-moeda ng-model="obj.parcela" ng-required="true">
+                        </div>
+                    </div>
+                </form>
+            </div>    
+        </div>
+        <br>
+        <div class="btn-group pull-right">
+            <button class="btn btn-danger" ng-click="cancelaNovo()">Cancelar</button>
+            <button class="btn btn-success" ng-click="salvarNovo(obj)">Salvar</button>
+        </div>
+    </section>
+</div>

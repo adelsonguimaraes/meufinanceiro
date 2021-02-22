@@ -1,0 +1,69 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">Solicitar Simulação</h4>
+        <small class="font-bold">Entre com as informações para solicitar a simulação</small>
+    </div>
+    <div class="modal-body">
+        <form name="formCad" ng-submit="ok(obj)">
+            <div class="row">
+            	<div class="col-md-12">
+					<div class="row">
+						<div class="col-sm-12">
+							<label for="status">Interesse</label>
+							<select class="form-control" name="interesse" id="interesse" ng-model="obj.interesse" ng-required="true">
+								<option value="AUTOMOVEL">Automóvel</option>
+								<option value="IMOVEL">Imóvel</option>
+								<option value="MOTO">Moto</option>
+								<option value="SERVICO">Serviço</option>
+								<option value="PESADO">Pesado</option>
+							</select>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<label for="nome">Qual o valor do bem?</label>
+							<input id="valor" ion-range-slider range-options="{min: 25000, max: 100000, step: 500, type: 'single', hasGrid: false, prefix: 'R$ ', from: 25000, from_shadow: 'true'}">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<label for="nome">Quanto deseja dar de entrada?</label>
+							<input id="entrada" ion-range-slider range-options="{min: 0, max: 5000, step: 100, type: 'single', hasGrid: false, prefix: 'R$ ', from: 25000, skin: 'big'}">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<label for="nome">Quanto deseja pagar por parcela?</label>
+							<input id="parcela" ion-range-slider range-options="{min: 400, max: 3000, step: 100, type: 'single', hasGrid: false, prefix: 'R$ ', from: 25000, skin: 'big'}">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<label for="nome">Nome <span class="importante">*</span></label>
+							<input type="text" class="form-control" name="nome" ng-model="obj.nome" placeholder="Qual seu nome?" ng-required="true">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<label for="celular">Celular <span class="importante">*</span></label>
+							<input type="tel" celular pattern="^\(\d{2}\)\s\d{4,5}-\d{4}$" class="form-control" name="celular" ng-model="obj.celular" placeholder="Qual seu celular?" ng-required="true">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12">
+							<label for="interesse">Email <span class="importante">*</span></label>
+							<input type="email" class="form-control" name="email" ng-model="obj.email" placeholder="Qual seu email?" ng-required="true">
+						</div>
+					</div>
+    			</div>
+            </div>
+		</form>
+		<small>
+			<span class="importante">* Preencha as informações corretamente.</span>
+		</small>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-default" ng-click="cancel()">Cancelar</button>
+        <button type="button" class="btn btn-danger" ng-click="ok(obj)" ng-disabled="formCad.$invalid">Solicitar</button>
+    </div>
+</div>

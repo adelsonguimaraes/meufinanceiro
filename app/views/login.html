@@ -1,0 +1,65 @@
+
+<div ng-include="'app/views/common/header.html'"></div>
+<div class="container">    
+    <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">                    
+        <div class="panel panel-info" >
+            <div class="panel-heading">
+                <div class="panel-title">Acessar</div>
+                <!-- <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="#">Esqueceu a senha?</a></div> -->
+            </div>     
+
+            <div style="padding-top:30px" class="panel-body" >
+
+                <div style="display:none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+                    
+                <form name="login_form" class="form-horizontal" role="form">
+                            
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input id="email" name="email" type="text" class="form-control" value="" ng-model="obj.email" placeholder="Insira seu e-mail" ng-required="true">                                        
+                    </div>
+                        
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                        <input id="senha" name="senha" type="password" class="form-control" ng-model="obj.senha" placeholder="Insira a senha" ng-required="true">
+                    </div>
+                            
+
+                        
+                    <div class="input-group">
+                        <div class="checkbox">
+                        <label>
+                            <input id="remember" type="checkbox" name="remember" ng-model="obj.remember" value="1"> Mantenha meu acesso
+                        </label>
+                        </div>
+                    </div>
+
+
+                    <div style="margin-top:10px" class="form-group">
+                        <!-- Button -->
+
+                        <div class="col-sm-12 controls">
+                            <a id="btn-login" class="btn btn-success" ng-click="acessar(obj)" ng-disabled="login_form.$invalid">Acessar  </a>
+                            <a id="btn-login" class="btn btn-primary">Esqueci a senha  </a>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="col-md-12 control">
+                            <div style="border-top: 1px solid#888; padding-top:15px; font-size:85%" >
+                               Solicite um acesso! 
+                            <a href="#" onClick="$('#loginbox').hide(); $('#signupbox').show()">
+                                Solicitar acesso
+                            </a>
+                            </div>
+                        </div>
+                    </div>    
+                </form>     
+
+
+
+            </div>                     
+        </div>  
+    </div>
+</div>
