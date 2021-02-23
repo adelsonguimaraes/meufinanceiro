@@ -16,7 +16,7 @@
                 <a class="unidade">Valores R$</a>
             </div>
             <ul>
-                <li ng-repeat="obj in movimentos" ng-class="{'recebimento': obj.tipo==='RECEBIMENTO'}"  ng-click="onClickValue(obj)">
+                <li ng-repeat="obj in movimentos" ng-class="[{'confirmado': obj.status==='CONFIRMADO'}, {'atrasado': obj.status==='ATRASADO'}]"  ng-click="onClickValue(obj)">
                     <span><i class="fa fa-circle"></i></span>
                     <a class="data">{{obj.dia_mes}} </a>
                     <a class="descricao">{{obj.nome + ' ' + obj.parcela_corrente}}</a>
@@ -48,7 +48,72 @@
                 </li>
             </ul>
             <div class="rodape">
-                <button class="btn btn-default" ng-click="onClickPagarTudo()">PAGAR TUDO</button>
+                <button class="btn btn-default" ng-click="onClickConfirmarTudo()">CONFIRMAR TUDO</button>
+            </div>
+        </div>
+    </section>
+    <section class="detalhes">
+        <a class="goback" ng-click="onClickGoBackDetalhes()">X</a>
+        <div class="content">
+            <div class="info">
+                <h4>Detalhes do Movimento</h4>
+                <hr>
+                <ul>
+                    <li>
+                        <a class="label">ID:</a>
+                        <a class="value">{{selecionado.id}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Nome:</a>
+                        <a class="value">{{selecionado.nome}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Descrição:</a>
+                        <a class="value">{{selecionado.descricao}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Vencimento:</a>
+                        <a class="value">{{selecionado.data_corrente | data}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Valor:</a>
+                        <a class="value">{{selecionado.valor_mensal | moeda}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Parcela:</a>
+                        <a class="value">{{selecionado.parcela_corrente}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Tipo:</a>
+                        <a class="value">{{selecionado.tipo}}</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- <div>Sub</div> -->
+            <div class="formulario">
+                <form name="formDetalhes">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label for="data_pagamento">Data Pagamento <span class="importante">*</span></label>
+                                    <input type="date" class="form-control" name="data_pagamento" ng-model="selecionado.data_pagamento" ng-required="true">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label for="valor_pago">Valor Pago <span class="importante">*</span></label>
+                                    <input type="tel" class="form-control" mascara-moeda name="valor_pago" ng-model="selecionado.valor_pago" placeholder="Valor atualizado" ng-required="true">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 10px 0;">
+                        <div class="col-sm-12">
+                            <button class="btn btn-default pull-right" ng-click="onClickConfirmarMovimento(selecionado)" ng-disabled="formDetalhes.$invalid">Salvar</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </section>

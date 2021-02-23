@@ -1,0 +1,33 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">Detalhes do Movimento</h4>
+        <small class="font-bold">Clique em confirmar para RECEBIMENTO/PAGAMENTO altere o valor caso necessário.</small>
+    </div>
+    <div class="modal-body">
+		<ul>
+			<li>Nome: {{selecionado.nome}}</li>
+			<li>Descrição: {{selecionado.descricao}}</li>
+			<li>Valor: {{selecionado.valor_mensal | moeda}}</li>
+			<li>Vencimento: {{selecionado.data_corrente | data}}</li>
+			<li>Tipo: {{selecionado.tipo}}</li>
+			<li>Parcela: {{selecionado.parcela_corrente}}</li>
+			<li>Status: {{selecionado.status}}</li>
+		</ul>
+        <form name="formPagamento">
+            <div class="row">
+            	<div class="col-md-12">
+					<div class="row">
+						<div class="col-sm-12">
+							<label for="valor">Valor <span class="importante">*</span></label>
+							<input type="text" class="form-control" mascara-moeda name="valor" ng-model="obj.valor" placeholder="Valor atualizado" ng-required="true">
+						</div>
+					</div>
+    			</div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancelar</button>
+        <button type="button" class="btn btn-danger" ng-click="ok(obj)" ng-disabled="formPagamento.$invalid">Confirmar</button>
+    </div>
+</div>
