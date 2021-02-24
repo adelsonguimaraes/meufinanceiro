@@ -168,7 +168,7 @@
     height: 100%;
     z-index: 3;
     transition: 500ms;
-    transform: translateY(100%);
+    transform: translateY(130%);
 }
 .detalhes_active {
     transform: translateY(0);
@@ -179,7 +179,7 @@
     color: white;
     font-size: 22px;
     position: absolute;
-    font-family: cursive;
+    font-family: sans-serif;
     text-decoration: none;
     padding: 5px;
     cursor: pointer;
