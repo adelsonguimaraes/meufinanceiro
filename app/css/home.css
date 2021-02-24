@@ -6,12 +6,13 @@
     align-items: center;
     justify-items: center;
     background: #69669a;
-    position: relative;
+    position: fixed;
     overflow-x: scroll;
     overflow-y: hidden;
     /* transition-duration: 500s; */
     /* scroll-behavior: smooth; */
     transition: all 0.2s;
+    z-index: 1;
 }
 .timeline-mes > .content {
     color: white;
@@ -68,15 +69,27 @@
 .em-atraso {
     color: #ad0d0d;
 }
+.box-timeline {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: 100%;
+    top: 80px;
+}
 .list-values {
     background: #303030db;
     color: white;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     font-size: 14px;
     padding: 5px;
     position: relative;
+    /* top: 80px; */
     transition: 500ms;
+    overflow: hidden;
+}
+.list-values-collaapse {
+    height: 0px;
 }
 .list-values a {
     color: white;
@@ -104,6 +117,8 @@
 .list-values > ul {
     padding: 0 10px;
     list-style: none;
+    overflow-y: scroll;
+    height: inherit;
 }
 .list-values > ul > li {
     display: flex;
@@ -115,13 +130,14 @@
     padding: 5px 0px 5px 20px;
     height: 50px;
     cursor: pointer;
+    position: relative;
 }
 .list-values > ul > li:hover * {
     color: cornflowerblue !important;
 }
 .list-values > ul > li > span {
     position: absolute;
-    left: 9px;
+    left: -6px;
     /* background: white; */
     border-radius: 50%;
     /* color: black; */
@@ -147,7 +163,7 @@
     width: 100%;
     position: fixed;
     left: 0;
-    bottom: 0;
+    top: 0;
     background: rgba(0, 0, 0, 0.438);
     height: 100%;
     z-index: 3;
@@ -212,6 +228,17 @@
 
 @media only screen and (min-width: 900px) {
 
+    .box-timeline {
+        position: fixed;
+        width: 100%;
+        padding: 80px 0 65px 0;
+        top: auto;
+        flex-direction: row;
+    }
+    .list-values {
+        height: inherit;
+        padding: 0 0 50px 0;
+    }
     .list-values-collaapse {
         width: 50%;
     }
@@ -221,13 +248,19 @@
     }
 
     .detalhes {
-        height: 80.3%;
+        height: inherit;
+        width: 0%;
         transform: translateX(100%);
         background: whitesmoke;
+        top: '';
+        bottom: '';
+        position: relative;
+        overflow: hidden;
     }
     .detalhes_active {
         width: 50%;
-        transform: translateX(100%);
+        transform: translateX(0%);
+        overflow: scroll;
     }
     .detalhes .content {
         height: 100%;

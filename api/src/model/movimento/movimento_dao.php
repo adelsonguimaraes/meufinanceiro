@@ -173,13 +173,21 @@ Class movimento_dao {
 			}
 			$sql .= "SELECT DATE_ADD(CURDATE(), INTERVAL {$i} MONTH) AS 'data',
 			CONCAT(UPPER(SUBSTR(MONTHNAME(DATE_ADD(CURDATE(), INTERVAL {$i} MONTH)), 1, 3)),' ', DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL {$i} MONTH), '%Y')) AS 'mes_ano',
+			IF(
+				(SELECT COUNT(*) FROM movimento m
+				LEFT JOIN movimento_mes mm ON mm.idmovimento = m.id 
+				AND DATE_FORMAT(mm.data_corrente, '%m%Y') = DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL {$i} MONTH), '%m%Y')
+				WHERE mm.id IS NULL AND CONCAT(DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL {$i} MONTH), '%Y-%m-'), DATE_FORMAT(m.data_inicial, '%d')) < CURDATE())>=1,
+				'ATRASADO', 'EMABERTO'
+			) AS 'status',
 			(SELECT SUM(m.valor_mensal)
 			FROM movimento m
 			WHERE m.idusuario = {$idusuario} AND
 			m.tipo = 'PAGAMENTO' AND
 			(DATE_ADD(m.data_inicial, INTERVAL m.quantidade_parcela MONTH) > 
 			DATE_ADD(CURDATE(), INTERVAL {$i} MONTH) OR m.quantidade_parcela<=0)) AS 'valor',
-			'EMABERTO' AS 'status', '{$ativo}' AS 'ativo'\r\n";
+			'{$ativo}' AS 'ativo'\r\n";
+
 		}
 
 		$result = mysqli_query ( $this->con, $sql );

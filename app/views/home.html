@@ -1,58 +1,152 @@
-<div class="box">
-    <div ng-include="'app/views/common/header.html'"></div>
-    <section>
-        <div class="timeline-mes" slider_horizontal>
-            <div class="content" ng-repeat="obj in meses" ng-class="{'content-active': obj.ativo==='SIM'}" ng-click="onClickMes(obj)">
-                <div class="mes">{{obj.mes_ano}}</div>
-                <div class="valor">
-                    <i class="fa fa-eercast" ng-class="[{'em-atraso': obj.status==='ATRASADO'}, {'pago': obj.status==='PAGO'}]"></i> {{obj.valor | moeda}}
-                </div>
-            </div>
+<div ng-include="'app/views/common/header.html'"></div>
+<div class="timeline-mes" slider_horizontal>
+    <div class="content" ng-repeat="obj in meses" ng-class="{'content-active': obj.ativo==='SIM'}" ng-click="onClickMes(obj)">
+        <div class="mes">{{obj.mes_ano}}</div>
+        <div class="valor">
+            <i class="fa fa-eercast" ng-class="[{'em-atraso': obj.status==='ATRASADO'}, {'pago': obj.status==='PAGO'}]"></i> {{obj.valor | moeda}}
         </div>
+    </div>
+</div>
 
-        <div class="list-values">
-            <div class="header">
-                <a class="perido">{{total.periodo}}</a>
-                <a class="unidade">Valores R$</a>
-            </div>
-            <ul>
-                <li ng-repeat="obj in movimentos" ng-class="[{'confirmado': obj.status==='CONFIRMADO'}, {'atrasado': obj.status==='ATRASADO'}]"  ng-click="onClickValue(obj)">
-                    <span><i class="fa fa-circle"></i></span>
-                    <a class="data">{{obj.dia_mes}} </a>
-                    <a class="descricao">{{obj.nome + ' ' + obj.parcela_corrente}}</a>
-                    <a class="valor"> 
-                        <span ng-if="obj.tipo==='RECEBIMENTO'">+</span>
-                        <span ng-if="obj.tipo==='PAGAMENTO'">-</span>
-                         {{obj.valor_mensal | moeda}}
-                    </a>
-                </li>
-                
-                <!-- totais -->
-                <li class="total">
-                    <span><i class="fa fa-sticky-note"></i></span>
-                    <a class="data">RECEBIMENTO </a>
-                    <a class="descricao"></a>
-                    <a class="valor">{{total.recebimento | moeda}}</a>
-                </li>
-                <li class="total">
-                    <span><i class="fa fa-sticky-note"></i></span>
-                    <a class="data">PAGAMENTO </a>
-                    <a class="descricao"></a>
-                    <a class="valor">{{total.pagamento | moeda}}</a>
-                </li>
-                <li class="total">
-                    <span><i class="fa fa-sticky-note"></i></span>
-                    <a class="data">LÍQUIDO </a>
-                    <a class="descricao"></a>
-                    <a class="valor">{{total.liquido | moeda}}</a>
-                </li>
-            </ul>
-            <div class="rodape">
-                <button class="btn btn-default" ng-click="onClickConfirmarTudo()">CONFIRMAR TUDO</button>
-            </div>
+<div class="box-timeline">
+    <div class="list-values">
+        <div class="header">
+            <a class="perido">{{total.periodo}}</a>
+            <a class="unidade">Valores R$</a>
         </div>
-    </section>
-    <section class="detalhes">
+        <ul>
+            <li ng-repeat="obj in movimentos" ng-class="[{'confirmado': obj.status==='CONFIRMADO'}, {'atrasado': obj.status==='ATRASADO'}]"  ng-click="onClickValue(obj)">
+                <span><i class="fa fa-circle"></i></span>
+                <a class="data">{{obj.dia_mes}} </a>
+                <a class="descricao">{{obj.nome + ' ' + obj.parcela_corrente}}</a>
+                <a class="valor"> 
+                    <span ng-if="obj.tipo==='RECEBIMENTO'">+</span>
+                    <span ng-if="obj.tipo==='PAGAMENTO'">-</span>
+                        {{obj.valor_mensal | moeda}}
+                </a>
+            </li>
+            
+            <!-- totais -->
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">RECEBIMENTO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.recebimento | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">PAGAMENTO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.pagamento | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">LÍQUIDO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.liquido | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">RECEBIMENTO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.recebimento | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">PAGAMENTO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.pagamento | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">LÍQUIDO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.liquido | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">RECEBIMENTO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.recebimento | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">PAGAMENTO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.pagamento | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">LÍQUIDO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.liquido | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">RECEBIMENTO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.recebimento | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">PAGAMENTO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.pagamento | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">LÍQUIDO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.liquido | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">RECEBIMENTO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.recebimento | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">PAGAMENTO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.pagamento | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">LÍQUIDO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.liquido | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">RECEBIMENTO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.recebimento | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">PAGAMENTO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.pagamento | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">LÍQUIDO </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.liquido | moeda}}</a>
+            </li>
+            <li class="total">
+                <span><i class="fa fa-sticky-note"></i></span>
+                <a class="data">TESTES DE SCROLL </a>
+                <a class="descricao"></a>
+                <a class="valor">{{total.liquido | moeda}}</a>
+            </li>
+        </ul>
+        <!-- <div class="rodape">
+            <button class="btn btn-default" ng-click="onClickConfirmarTudo()">CONFIRMAR TUDO</button>
+        </div> -->
+    </div>
+    <div class="detalhes">
         <a class="goback" ng-click="onClickGoBackDetalhes()">X</a>
         <div class="content">
             <div class="info">
@@ -116,5 +210,5 @@
                 </form>
             </div>
         </div>
-    </section>
+    </div>
 </div>
