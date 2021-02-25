@@ -1,20 +1,69 @@
 <div ng-include="'app/views/common/header.html'"></div>
-<div class="timeline-mes" slider_horizontal>
-    <div class="content" ng-repeat="obj in meses" ng-class="{'content-active': obj.ativo==='SIM'}" ng-click="onClickMes(obj)">
-        <div class="mes">{{obj.mes_ano}}</div>
-        <div class="valor">
-            <i class="fa fa-eercast" ng-class="[{'em-atraso': obj.status==='ATRASADO'}, {'pago': obj.status==='PAGO'}]"></i> {{obj.valor | moeda}}
+<div class="box-timeline">
+    <div class="timeline-mes" slider_horizontal>
+        <div class="content" ng-repeat="obj in meses" ng-class="{'content-active': obj.ativo==='SIM'}" ng-click="onClickMes(obj)">
+            <div class="mes">{{obj.mes_ano}}</div>
+            <div class="valor">
+                <i class="fa fa-eercast" ng-class="[{'em-atraso': obj.status==='ATRASADO'}, {'pago': obj.status==='PAGO'}]"></i> {{obj.valor | moeda}}
+            </div>
         </div>
     </div>
-</div>
-
-<div class="box-timeline">
     <div class="list-values">
         <div class="header">
             <a class="perido">{{total.periodo}}</a>
             <a class="unidade">Valores R$</a>
         </div>
         <ul>
+            <li ng-repeat="obj in movimentos" ng-class="[{'confirmado': obj.status==='CONFIRMADO'}, {'atrasado': obj.status==='ATRASADO'}]"  ng-click="onClickValue(obj)">
+                <span><i class="fa fa-circle"></i></span>
+                <a class="data">{{obj.dia_mes}} </a>
+                <a class="descricao">{{obj.nome + ' ' + obj.parcela_corrente}}</a>
+                <a class="valor"> 
+                    <span ng-if="obj.tipo==='RECEBIMENTO'">+</span>
+                    <span ng-if="obj.tipo==='PAGAMENTO'">-</span>
+                        {{obj.valor_mensal | moeda}}
+                </a>
+            </li>
+            <li ng-repeat="obj in movimentos" ng-class="[{'confirmado': obj.status==='CONFIRMADO'}, {'atrasado': obj.status==='ATRASADO'}]"  ng-click="onClickValue(obj)">
+                <span><i class="fa fa-circle"></i></span>
+                <a class="data">{{obj.dia_mes}} </a>
+                <a class="descricao">{{obj.nome + ' ' + obj.parcela_corrente}}</a>
+                <a class="valor"> 
+                    <span ng-if="obj.tipo==='RECEBIMENTO'">+</span>
+                    <span ng-if="obj.tipo==='PAGAMENTO'">-</span>
+                        {{obj.valor_mensal | moeda}}
+                </a>
+            </li>
+            <li ng-repeat="obj in movimentos" ng-class="[{'confirmado': obj.status==='CONFIRMADO'}, {'atrasado': obj.status==='ATRASADO'}]"  ng-click="onClickValue(obj)">
+                <span><i class="fa fa-circle"></i></span>
+                <a class="data">{{obj.dia_mes}} </a>
+                <a class="descricao">{{obj.nome + ' ' + obj.parcela_corrente}}</a>
+                <a class="valor"> 
+                    <span ng-if="obj.tipo==='RECEBIMENTO'">+</span>
+                    <span ng-if="obj.tipo==='PAGAMENTO'">-</span>
+                        {{obj.valor_mensal | moeda}}
+                </a>
+            </li>
+            <li ng-repeat="obj in movimentos" ng-class="[{'confirmado': obj.status==='CONFIRMADO'}, {'atrasado': obj.status==='ATRASADO'}]"  ng-click="onClickValue(obj)">
+                <span><i class="fa fa-circle"></i></span>
+                <a class="data">{{obj.dia_mes}} </a>
+                <a class="descricao">{{obj.nome + ' ' + obj.parcela_corrente}}</a>
+                <a class="valor"> 
+                    <span ng-if="obj.tipo==='RECEBIMENTO'">+</span>
+                    <span ng-if="obj.tipo==='PAGAMENTO'">-</span>
+                        {{obj.valor_mensal | moeda}}
+                </a>
+            </li>
+            <li ng-repeat="obj in movimentos" ng-class="[{'confirmado': obj.status==='CONFIRMADO'}, {'atrasado': obj.status==='ATRASADO'}]"  ng-click="onClickValue(obj)">
+                <span><i class="fa fa-circle"></i></span>
+                <a class="data">{{obj.dia_mes}} </a>
+                <a class="descricao">{{obj.nome + ' ' + obj.parcela_corrente}}</a>
+                <a class="valor"> 
+                    <span ng-if="obj.tipo==='RECEBIMENTO'">+</span>
+                    <span ng-if="obj.tipo==='PAGAMENTO'">-</span>
+                        {{obj.valor_mensal | moeda}}
+                </a>
+            </li>
             <li ng-repeat="obj in movimentos" ng-class="[{'confirmado': obj.status==='CONFIRMADO'}, {'atrasado': obj.status==='ATRASADO'}]"  ng-click="onClickValue(obj)">
                 <span><i class="fa fa-circle"></i></span>
                 <a class="data">{{obj.dia_mes}} </a>
@@ -51,12 +100,182 @@
         </div> -->
     </div>
     <div class="detalhes">
-        <a class="goback" ng-click="onClickGoBackDetalhes()">X</a>
         <div class="content">
-            <div class="info">
+            <div class="header">
+                <a class="goback" ng-click="onClickGoBackDetalhes()">X</a>
                 <h4>Detalhes do Movimento</h4>
-                <hr>
+            </div>
+            <!-- <hr> -->
+            <div class="info">
                 <ul>
+                    <li>
+                        <a class="label">ID:</a>
+                        <a class="value">{{selecionado.id}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Nome:</a>
+                        <a class="value">{{selecionado.nome}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Descrição:</a>
+                        <a class="value">{{selecionado.descricao}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Vencimento:</a>
+                        <a class="value">{{selecionado.data_corrente | data}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Valor:</a>
+                        <a class="value">{{selecionado.valor_mensal | moeda}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Parcela:</a>
+                        <a class="value">{{selecionado.parcela_corrente}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Tipo:</a>
+                        <a class="value">{{selecionado.tipo}}</a>
+                    </li>
+                    <li>
+                        <a class="label">ID:</a>
+                        <a class="value">{{selecionado.id}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Nome:</a>
+                        <a class="value">{{selecionado.nome}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Descrição:</a>
+                        <a class="value">{{selecionado.descricao}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Vencimento:</a>
+                        <a class="value">{{selecionado.data_corrente | data}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Valor:</a>
+                        <a class="value">{{selecionado.valor_mensal | moeda}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Parcela:</a>
+                        <a class="value">{{selecionado.parcela_corrente}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Tipo:</a>
+                        <a class="value">{{selecionado.tipo}}</a>
+                    </li>
+                    <li>
+                        <a class="label">ID:</a>
+                        <a class="value">{{selecionado.id}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Nome:</a>
+                        <a class="value">{{selecionado.nome}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Descrição:</a>
+                        <a class="value">{{selecionado.descricao}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Vencimento:</a>
+                        <a class="value">{{selecionado.data_corrente | data}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Valor:</a>
+                        <a class="value">{{selecionado.valor_mensal | moeda}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Parcela:</a>
+                        <a class="value">{{selecionado.parcela_corrente}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Tipo:</a>
+                        <a class="value">{{selecionado.tipo}}</a>
+                    </li>
+                    <li>
+                        <a class="label">ID:</a>
+                        <a class="value">{{selecionado.id}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Nome:</a>
+                        <a class="value">{{selecionado.nome}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Descrição:</a>
+                        <a class="value">{{selecionado.descricao}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Vencimento:</a>
+                        <a class="value">{{selecionado.data_corrente | data}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Valor:</a>
+                        <a class="value">{{selecionado.valor_mensal | moeda}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Parcela:</a>
+                        <a class="value">{{selecionado.parcela_corrente}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Tipo:</a>
+                        <a class="value">{{selecionado.tipo}}</a>
+                    </li>
+                    <li>
+                        <a class="label">ID:</a>
+                        <a class="value">{{selecionado.id}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Nome:</a>
+                        <a class="value">{{selecionado.nome}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Descrição:</a>
+                        <a class="value">{{selecionado.descricao}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Vencimento:</a>
+                        <a class="value">{{selecionado.data_corrente | data}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Valor:</a>
+                        <a class="value">{{selecionado.valor_mensal | moeda}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Parcela:</a>
+                        <a class="value">{{selecionado.parcela_corrente}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Tipo:</a>
+                        <a class="value">{{selecionado.tipo}}</a>
+                    </li>
+                    <li>
+                        <a class="label">ID:</a>
+                        <a class="value">{{selecionado.id}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Nome:</a>
+                        <a class="value">{{selecionado.nome}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Descrição:</a>
+                        <a class="value">{{selecionado.descricao}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Vencimento:</a>
+                        <a class="value">{{selecionado.data_corrente | data}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Valor:</a>
+                        <a class="value">{{selecionado.valor_mensal | moeda}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Parcela:</a>
+                        <a class="value">{{selecionado.parcela_corrente}}</a>
+                    </li>
+                    <li>
+                        <a class="label">Tipo:</a>
+                        <a class="value">{{selecionado.tipo}}</a>
+                    </li>
                     <li>
                         <a class="label">ID:</a>
                         <a class="value">{{selecionado.id}}</a>

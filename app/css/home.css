@@ -72,9 +72,11 @@
 .box-timeline {
     display: flex;
     flex-direction: column;
-    position: relative;
+    position: fixed;
+    width: 100%;
     height: 100%;
-    top: 80px;
+    padding: 0px 0 65px 0;
+    z-index: 2;
 }
 .list-values {
     background: #303030db;
@@ -82,11 +84,11 @@
     width: 100%;
     height: 100%;
     font-size: 14px;
-    padding: 5px;
+    padding: 80px 5px;
     position: relative;
     /* top: 80px; */
     transition: 500ms;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 .list-values-collaapse {
     height: 0px;
@@ -115,10 +117,10 @@
     text-align: end;
 }
 .list-values > ul {
-    padding: 0 10px;
     list-style: none;
     overflow-y: scroll;
     height: inherit;
+    padding: 0 10px 60px 10px;
 }
 .list-values > ul > li {
     display: flex;
@@ -173,12 +175,12 @@
 .detalhes_active {
     transform: translateY(0);
 }
-.detalhes > .goback {
+.detalhes > .content > .header > .goback {
     top: 10px;
     right: 10px;
     color: white;
     font-size: 22px;
-    position: absolute;
+    position: fixed;
     font-family: sans-serif;
     text-decoration: none;
     padding: 5px;
@@ -192,8 +194,13 @@
     bottom: 0;
     left: 0;
     position: absolute;
+    overflow: auto;
 }
-.detalhes > .content > .info > h4 {
+.detalhes > .content > .header {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px;
+}
+.detalhes > .content > .header > h4 {
     text-align: center;
     font-weight: bold;
 }
@@ -231,16 +238,18 @@
     .box-timeline {
         position: fixed;
         width: 100%;
-        padding: 80px 0 65px 0;
+        /* padding: 80px 0 65px 0; */
         top: auto;
         flex-direction: row;
+        z-index: 0;
     }
     .list-values {
         height: inherit;
-        padding: 0 0 50px 0;
+        /* padding: 0 0 50px 0; */
     }
     .list-values-collaapse {
-        width: 50%;
+        height: 100%;
+        /* width: 50%; */
     }
 
     .list-values > .rodape {
@@ -248,26 +257,35 @@
     }
 
     .detalhes {
-        height: inherit;
+        height: calc(100% - 80px);
         width: 0%;
-        transform: translateX(100%);
+        transform: translateX(130%);
         background: whitesmoke;
-        top: '';
+        top: 80px;
         bottom: '';
         position: relative;
-        overflow: hidden;
+        /* overflow: auto; */
     }
     .detalhes_active {
-        width: 50%;
+        width: 70%;
         transform: translateX(0%);
-        overflow: scroll;
     }
     .detalhes .content {
         height: 100%;
+        top: 60px;
     }
-    .detalhes > .goback {
+    .detalhes > .content > .header {
+        position: fixed;
+        width: 100%;
+        height: 68px;
+        background: whitesmoke;
+        top: 0;
+        left: 0;
+    }
+    .detalhes > .content > .header > .goback {
         color: black;
         z-index: 1;
+        position: absolute;
     }
     
     /* estilizando o scroll */
