@@ -173,13 +173,13 @@ Class movimento_dao {
 			}
 			$sql .= "SELECT DATE_ADD(CURDATE(), INTERVAL {$i} MONTH) AS 'data',
 			CONCAT(UPPER(SUBSTR(MONTHNAME(DATE_ADD(CURDATE(), INTERVAL {$i} MONTH)), 1, 3)),' ', DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL {$i} MONTH), '%Y')) AS 'mes_ano',
-			IF(
-				(SELECT COUNT(*) FROM movimento m
-				LEFT JOIN movimento_mes mm ON mm.idmovimento = m.id 
-				AND DATE_FORMAT(mm.data_corrente, '%m%Y') = DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL {$i} MONTH), '%m%Y')
-				WHERE mm.id IS NULL AND CONCAT(DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL {$i} MONTH), '%Y-%m-'), DATE_FORMAT(m.data_inicial, '%d')) < CURDATE())>=1,
-				'ATRASADO', 'EMABERTO'
-			) AS 'status',
+			-- IF(
+			-- 	(SELECT COUNT(*) FROM movimento m
+			-- 	LEFT JOIN movimento_mes mm ON mm.idmovimento = m.id 
+			-- 	AND DATE_FORMAT(mm.data_corrente, '%m%Y') = DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL {$i} MONTH), '%m%Y')
+			-- 	WHERE mm.id IS NULL AND CONCAT(DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL {$i} MONTH), '%Y-%m-'), DATE_FORMAT(m.data_inicial, '%d')) < CURDATE())>=1,
+			-- 	'ATRASADO', 'EMABERTO'
+			-- ) AS 'status',
 			(SELECT SUM(m.valor_mensal)
 			FROM movimento m
 			WHERE m.idusuario = {$idusuario} AND
@@ -196,12 +196,29 @@ Class movimento_dao {
 		if ( !$result ) {
 			$this->superdao->setMsg( resolve( mysqli_errno( $this->con ), mysqli_error( $this->con ), 'movimento' , 'ListarPaginado' ) );
 		}else{
+			$lista = array();
 			while ( $row = mysqli_fetch_assoc ( $result ) ) {
-				array_push( $this->lista, $row);
+				$status = null;	
+				$resp = $this->listarPorMesAno($idusuario, $row['data']);
+				
+				if (!$resp['success']) return $resp;
+				$movimentos = $resp['data'];
+				
+				$confirmados=0; $abertos=0; $atrasados=0;
+				foreach ($movimentos as $key) {
+					if ($key['status']==='CONFIRMADO') $confirmados++;
+					if ($key['status']==='EMABERTO') $abertos++;
+					if ($key['status']==='ATRASADO') $atrasados++;
+				}
+				if ($confirmados>0) $status = "CONFIRMADO";
+				if ($abertos>0) $status = "EMABERTO";
+				if ($atrasados>0) $status = "ATRASADO";
+				$row['status'] = $status;
+				array_push( $lista, $row);
 			}
 
 			$this->superdao->setSuccess( true );
-			$this->superdao->setData( $this->lista );
+			$this->superdao->setData( $lista );
 		}
 
 		return $this->superdao->getResponse();
@@ -232,7 +249,18 @@ Class movimento_dao {
 				)+1, '/', m.quantidade_parcela
 			)
 		) AS 'parcela_corrente',
-		IF(CONCAT(DATE_FORMAT('{$data}', '%Y-%m-'), DATE_FORMAT(m.data_inicial, '%d'))<CURDATE(), 'ATRASADO', 'EMABERTO') as 'status',
+		-- IF(CONCAT(DATE_FORMAT('{$data}', '%Y-%m-'), DATE_FORMAT(m.data_inicial, '%d'))<CURDATE(), 'ATRASADO', 'EMABERTO') as 'status',
+		IF (
+			-- verificando se está CONFIRMADO
+			mm.id IS NOT NULL,
+			'CONFIRMADO',
+			IF (
+				-- caso não CONFIRMADO, verificamos se está em ATRASO
+				(CONCAT(DATE_FORMAT('{$data}', '%Y-%m-'), DATE_FORMAT(m.data_inicial, '%d'))<CURDATE()),
+				'ATRASADO',
+				'EMABERTO'
+			)
+		) AS 'status',
 		-- total recebimento mensal
 		IFNULL((SELECT SUM(m.valor_mensal)
 		FROM movimento m
@@ -260,6 +288,9 @@ Class movimento_dao {
 			UPPER(SUBSTRING(MONTHNAME('{$data}'), 1, 3))
 		) AS 'periodo'
 		FROM movimento m
+		LEFT JOIN movimento_mes mm ON mm.idmovimento = m.id
+		-- onde o mês e ano da dara corrente sejam iaguais
+		AND (DATE_FORMAT(mm.data_corrente, '%m%Y') = DATE_FORMAT('{$data}', '%m%Y'))
 		$where
 		-- ordenando pela data corrente
 		ORDER BY data_corrente ASC";
@@ -271,17 +302,17 @@ Class movimento_dao {
 		if ( !$result ) {
 			$this->superdao->setMsg( resolve( mysqli_errno( $this->con ), mysqli_error( $this->con ), 'movimento' , 'ListarPorMesAno' ) );
 		}else{
+			$lista = array();
 			while ( $row = mysqli_fetch_assoc ( $result ) ) {
-				$control_moviment_mes = new movimento_mes_control();
-				$resp = $control_moviment_mes->buscarPorMovimentoDataCorrente($row['id'], $row['data_corrente']);
-				if (!$resp['success']) return $resp;
-				if (!empty($resp['data'])) $row['status'] = 'CONFIRMADO';
-
-				array_push( $this->lista, $row);
+				// $control_moviment_mes = new movimento_mes_control();
+				// $resp = $control_moviment_mes->buscarPorMovimentoDataCorrente($row['id'], $row['data_corrente']);
+				// if (!$resp['success']) return $resp;
+				// if (!empty($resp['data'])) $row['status'] = 'CONFIRMADO';
+				array_push( $lista, $row);
 			}
 
 			$this->superdao->setSuccess( true );
-			$this->superdao->setData( $this->lista );
+			$this->superdao->setData( $lista );
 		}
 
 		return $this->superdao->getResponse();

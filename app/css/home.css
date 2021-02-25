@@ -64,7 +64,7 @@
     color: #ffc031 !important;
 }
 .pago {
-    color: #48fb0e;
+    color: #86b755;
 }
 .em-atraso {
     color: #ad0d0d;
@@ -264,14 +264,14 @@
         top: 80px;
         bottom: '';
         position: relative;
-        /* overflow: auto; */
+        overflow: auto;
     }
     .detalhes_active {
         width: 70%;
         transform: translateX(0%);
     }
     .detalhes .content {
-        height: 100%;
+        height: calc(100% - 60px);
         top: 60px;
     }
     .detalhes > .content > .header {
