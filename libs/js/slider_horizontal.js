@@ -1,6 +1,8 @@
 function sliderHorizontal () {
     setTimeout(()=>{
         const slider = document.querySelector('[slider_horizontal]');
+        if (slider===null) return false;
+        
         let isDown = false;
         let startX;
         let scrollLeft;

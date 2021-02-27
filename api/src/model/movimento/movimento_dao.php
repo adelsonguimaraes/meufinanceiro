@@ -66,19 +66,10 @@ Class movimento_dao {
 
 	function atualizarCartao ($idmovimento, $idcartao) {
 
-		$this->sql = sprintf("UPDATE movimento SET idusuario = %d, nome = '%s', descricao = '%s', valor_mensal = '%s', quantidade_parcela = %d, data_inicial = %d, tipo = '%s', data_edicao = '%s' WHERE id = %d ",
-			mysqli_real_escape_string($this->con, $obj->getIdusuario()),
-			mysqli_real_escape_string($this->con, $obj->getNome()),
-			mysqli_real_escape_string($this->con, $obj->getDescricao()),
-			mysqli_real_escape_string($this->con, $obj->getValor_mensal()),
-			mysqli_real_escape_string($this->con, $obj->getQuantidade_parcela()),
-			mysqli_real_escape_string($this->con, $obj->getData_inicial()),
-			mysqli_real_escape_string($this->con, $obj->getTipo()),
-			mysqli_real_escape_string($this->con, date('Y-m-d H:i:s')),
-			mysqli_real_escape_string($this->con, $obj->getId()));
-
-			echo $this->sql;
-			exit;
+		$this->sql = "UPDATE movimento 
+		SET idcartao = {$idcartao}, 
+		data_edicao = \"".date('Y-m-d')."\" 
+		WHERE id = {$idmovimento}";
 
 		$this->superdao->resetResponse();
 
@@ -158,9 +149,70 @@ Class movimento_dao {
 		return $this->superdao->getResponse();
 	}
 
+	function getSaltoTimeLine ($idusuario, $salto=NULL) {
+		if(!$salto) $salto = 10;
+		$sql = "SELECT 
+		IF(
+			TIMESTAMPDIFF(
+				MONTH,
+				DATE_FORMAT(
+					MIN(m.data_inicial),
+					'%Y-%m-01'
+				),
+				DATE_FORMAT(
+					MAX(
+						DATE_ADD(
+							m.data_inicial,
+							INTERVAL (m.quantidade_parcela-1) MONTH
+						)
+					),
+					'%Y-%m-01'
+				)
+			)<{$salto},
+			{$salto},
+			TIMESTAMPDIFF(
+				MONTH,
+				DATE_FORMAT(
+					MIN(m.data_inicial),
+					'%Y-%m-01'
+				),
+				DATE_FORMAT(
+					MAX(
+						DATE_ADD(
+							m.data_inicial,
+							INTERVAL (m.quantidade_parcela-1) MONTH
+						)
+					),
+					'%Y-%m-01'
+				)
+			)
+		) AS 'salto'
+		FROM movimento m
+		WHERE m.idusuario = {$idusuario}
+		AND m.ativo = 'SIM'";
+
+		$result = mysqli_query ( $this->con, $sql );
+		$this->superdao->resetResponse();
+
+		if ( !$result ) {
+			$this->superdao->setMsg( resolve( mysqli_errno( $this->con ), mysqli_error( $this->con ), 'movimento' , 'ListarPaginado' ) );
+		}else{
+			$row = mysqli_fetch_assoc ( $result );
+		}
+
+		$this->superdao->setSuccess( true );
+		$this->superdao->setData( $row['salto'] );
+
+		return $this->superdao->getResponse();
+	}
+
 	function listarMesesTimeline ($idusuario) {
-		$intervalo = 10; // o intervalo que controla quantos meses serão consultados
-		$ativo = 'SIM';
+		
+		// consultando o salto de meses pra timeline
+		$resp = $this->getSaltoTimeLine ($idusuario);
+		if (!$resp['success']) return $resp;
+		$intervalo = $resp['data']; // o intervalo que controla quantos meses serão consultados
+
 		$sql = '';
 
 		for ($i=0; $i<=$intervalo; $i++) {
@@ -171,22 +223,15 @@ Class movimento_dao {
 				$sql .= "UNION\r\n"; // se tiver mais de um intervalo fazemos union
 				$ativo = 'NAO';
 			}
-			$sql .= "SELECT DATE_ADD(CURDATE(), INTERVAL {$i} MONTH) AS 'data',
-			CONCAT(UPPER(SUBSTR(MONTHNAME(DATE_ADD(CURDATE(), INTERVAL {$i} MONTH)), 1, 3)),' ', DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL {$i} MONTH), '%Y')) AS 'mes_ano',
-			-- IF(
-			-- 	(SELECT COUNT(*) FROM movimento m
-			-- 	LEFT JOIN movimento_mes mm ON mm.idmovimento = m.id 
-			-- 	AND DATE_FORMAT(mm.data_corrente, '%m%Y') = DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL {$i} MONTH), '%m%Y')
-			-- 	WHERE mm.id IS NULL AND CONCAT(DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL {$i} MONTH), '%Y-%m-'), DATE_FORMAT(m.data_inicial, '%d')) < CURDATE())>=1,
-			-- 	'ATRASADO', 'EMABERTO'
-			-- ) AS 'status',
-			(SELECT SUM(m.valor_mensal)
-			FROM movimento m
-			WHERE m.idusuario = {$idusuario} AND
-			m.tipo = 'PAGAMENTO' AND
-			(DATE_ADD(m.data_inicial, INTERVAL m.quantidade_parcela MONTH) > 
-			DATE_ADD(CURDATE(), INTERVAL {$i} MONTH) OR m.quantidade_parcela<=0)) AS 'valor',
-			'{$ativo}' AS 'ativo'\r\n";
+			$sql .= "SELECT DATE_ADD((SELECT MIN(m.data_inicial) FROM movimento m), INTERVAL {$i} MONTH) AS 'data',
+			CONCAT(UPPER(SUBSTR(MONTHNAME(DATE_ADD((SELECT MIN(m.data_inicial) FROM movimento m), INTERVAL {$i} MONTH)), 1, 3)),' ', DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL {$i} MONTH), '%Y')) AS 'mes_ano',
+			IF(
+				DATE_FORMAT(
+					DATE_ADD((SELECT MIN(m.data_inicial) FROM movimento m), INTERVAL {$i} MONTH),
+					'%m%Y'
+				) = DATE_FORMAT(CURDATE(), '%m%Y'),
+				'SIM', 'NAO'
+			) AS 'ativo'\r\n";
 
 		}
 
@@ -198,6 +243,7 @@ Class movimento_dao {
 		}else{
 			$lista = array();
 			while ( $row = mysqli_fetch_assoc ( $result ) ) {
+				
 				$status = null;	
 				$resp = $this->listarPorMesAno($idusuario, $row['data']);
 				
@@ -214,8 +260,11 @@ Class movimento_dao {
 				if ($abertos>0) $status = "EMABERTO";
 				if ($atrasados>0) $status = "ATRASADO";
 				$row['status'] = $status;
+				$row['valor'] = $movimentos[0]['total_pagamento'];
 				array_push( $lista, $row);
 			}
+
+			// mysqli_free_result($result);
 
 			$this->superdao->setSuccess( true );
 			$this->superdao->setData( $lista );
@@ -227,75 +276,79 @@ Class movimento_dao {
 	// passando um mês ano para compar se a data_inicial somada a quantidade de meses é > que o mes ano informado
 	function listarPorMesAno ($idusuario, $data) {
 
-		$where = "WHERE m.idusuario = {$idusuario} AND
-		-- onde a data de (movimento + parcelas) seja maior que a data corrente
-		(DATE_FORMAT(DATE_ADD(data_inicial,INTERVAL m.quantidade_parcela MONTH), '%m%Y') > 
-		DATE_FORMAT(DATE('{$data}'), '%m%Y') OR m.quantidade_parcela<=0)";
+		$this->con->next_result();
+
+		$sql = "call listar_movimentos({$idusuario}, '{$data}')";
+
+		// $where = "WHERE m.idusuario = {$idusuario} AND
+		// -- onde a data de (movimento + parcelas) seja maior que a data corrente
+		// (DATE_FORMAT(DATE_ADD(data_inicial,INTERVAL m.quantidade_parcela MONTH), '%m%Y') > 
+		// DATE_FORMAT(DATE('{$data}'), '%m%Y') OR m.quantidade_parcela<=0)";
 
 
-		$this->sql = "SELECT m.*, 
-		-- data corrente
-		CONCAT(DATE_FORMAT('{$data}', '%Y-%m-'), DATE_FORMAT(m.data_inicial, '%d')) AS 'data_corrente',
-		-- dia e mes corrente
-		CONCAT(DATE_FORMAT(m.data_inicial, '%d'), ' ', UPPER(SUBSTR(MONTHNAME('{$data}'), 1, 3))) AS 'dia_mes',
-		-- parcela corrente
-		IF(m.quantidade_parcela<=0, '',
-			CONCAT(
-				m.quantidade_parcela -
-				TIMESTAMPDIFF(
-					MONTH, 
-					'{$data}',
-					DATE_ADD(m.data_inicial, INTERVAL m.quantidade_parcela MONTH)
-				)+1, '/', m.quantidade_parcela
-			)
-		) AS 'parcela_corrente',
-		-- IF(CONCAT(DATE_FORMAT('{$data}', '%Y-%m-'), DATE_FORMAT(m.data_inicial, '%d'))<CURDATE(), 'ATRASADO', 'EMABERTO') as 'status',
-		IF (
-			-- verificando se está CONFIRMADO
-			mm.id IS NOT NULL,
-			'CONFIRMADO',
-			IF (
-				-- caso não CONFIRMADO, verificamos se está em ATRASO
-				(CONCAT(DATE_FORMAT('{$data}', '%Y-%m-'), DATE_FORMAT(m.data_inicial, '%d'))<CURDATE()),
-				'ATRASADO',
-				'EMABERTO'
-			)
-		) AS 'status',
-		-- total recebimento mensal
-		IFNULL((SELECT SUM(m.valor_mensal)
-		FROM movimento m
-		$where AND m.tipo='RECEBIMENTO'), 0) AS 'total_recebimento',
-		-- total pagamento mensal
-		IFNULL((SELECT SUM(m.valor_mensal)
-		FROM movimento m
-		$where AND m.tipo='PAGAMENTO'), 0) AS 'total_pagamento',
-		-- total do liquido (recebimentos-pagamento)
-		IFNULL(
-			(IFNULL((SELECT SUM(m.valor_mensal)
-			FROM movimento m
-			$where AND m.tipo='RECEBIMENTO'), 0) -
-			IFNULL((SELECT SUM(m.valor_mensal)
-			FROM movimento m
-			$where AND m.tipo='PAGAMENTO'), 0)), 0
-		) AS 'total_liquido',
-		-- periodo mensal
-		CONCAT(
-			'De 01 ', 
-			UPPER(SUBSTRING(MONTHNAME('{$data}'), 1, 3)), 
-			' até ', 
-			DATE_FORMAT(LAST_DAY('{$data}'), '%d'),
-			' ',
-			UPPER(SUBSTRING(MONTHNAME('{$data}'), 1, 3))
-		) AS 'periodo'
-		FROM movimento m
-		LEFT JOIN movimento_mes mm ON mm.idmovimento = m.id
-		-- onde o mês e ano da dara corrente sejam iaguais
-		AND (DATE_FORMAT(mm.data_corrente, '%m%Y') = DATE_FORMAT('{$data}', '%m%Y'))
-		$where
-		-- ordenando pela data corrente
-		ORDER BY data_corrente ASC";
+		// $this->sql = "SELECT m.*, 
+		// -- data corrente
+		// CONCAT(DATE_FORMAT('{$data}', '%Y-%m-'), DATE_FORMAT(m.data_inicial, '%d')) AS 'data_corrente',
+		// -- dia e mes corrente
+		// CONCAT(DATE_FORMAT(m.data_inicial, '%d'), ' ', UPPER(SUBSTR(MONTHNAME('{$data}'), 1, 3))) AS 'dia_mes',
+		// -- parcela corrente
+		// IF(m.quantidade_parcela<=0, '',
+		// 	CONCAT(
+		// 		m.quantidade_parcela -
+		// 		TIMESTAMPDIFF(
+		// 			MONTH, 
+		// 			'{$data}',
+		// 			DATE_ADD(m.data_inicial, INTERVAL m.quantidade_parcela MONTH)
+		// 		)+1, '/', m.quantidade_parcela
+		// 	)
+		// ) AS 'parcela_corrente',
+		// -- IF(CONCAT(DATE_FORMAT('{$data}', '%Y-%m-'), DATE_FORMAT(m.data_inicial, '%d'))<CURDATE(), 'ATRASADO', 'EMABERTO') as 'status',
+		// IF (
+		// 	-- verificando se está CONFIRMADO
+		// 	mm.id IS NOT NULL,
+		// 	'CONFIRMADO',
+		// 	IF (
+		// 		-- caso não CONFIRMADO, verificamos se está em ATRASO
+		// 		(CONCAT(DATE_FORMAT('{$data}', '%Y-%m-'), DATE_FORMAT(m.data_inicial, '%d'))<CURDATE()),
+		// 		'ATRASADO',
+		// 		'EMABERTO'
+		// 	)
+		// ) AS 'status',
+		// -- total recebimento mensal
+		// IFNULL((SELECT SUM(m.valor_mensal)
+		// FROM movimento m
+		// $where AND m.tipo='RECEBIMENTO'), 0) AS 'total_recebimento',
+		// -- total pagamento mensal
+		// IFNULL((SELECT SUM(m.valor_mensal)
+		// FROM movimento m
+		// $where AND m.tipo='PAGAMENTO'), 0) AS 'total_pagamento',
+		// -- total do liquido (recebimentos-pagamento)
+		// IFNULL(
+		// 	(IFNULL((SELECT SUM(m.valor_mensal)
+		// 	FROM movimento m
+		// 	$where AND m.tipo='RECEBIMENTO'), 0) -
+		// 	IFNULL((SELECT SUM(m.valor_mensal)
+		// 	FROM movimento m
+		// 	$where AND m.tipo='PAGAMENTO'), 0)), 0
+		// ) AS 'total_liquido',
+		// -- periodo mensal
+		// CONCAT(
+		// 	'De 01 ', 
+		// 	UPPER(SUBSTRING(MONTHNAME('{$data}'), 1, 3)), 
+		// 	' até ', 
+		// 	DATE_FORMAT(LAST_DAY('{$data}'), '%d'),
+		// 	' ',
+		// 	UPPER(SUBSTRING(MONTHNAME('{$data}'), 1, 3))
+		// ) AS 'periodo'
+		// FROM movimento m
+		// LEFT JOIN movimento_mes mm ON mm.idmovimento = m.id
+		// -- onde o mês e ano da dara corrente sejam iaguais
+		// AND (DATE_FORMAT(mm.data_corrente, '%m%Y') = DATE_FORMAT('{$data}', '%m%Y'))
+		// $where
+		// -- ordenando pela data corrente
+		// ORDER BY data_corrente ASC";
 
-		$result = mysqli_query ( $this->con, $this->sql );
+		$result = mysqli_query ( $this->con, $sql );
 
 		$this->superdao->resetResponse();
 

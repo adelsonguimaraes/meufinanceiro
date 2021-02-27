@@ -22,7 +22,7 @@ const MyMenu = {
         user.classList = 'user';
         var img = document.createElement('img');
         img.id = "menu-profile";
-        img.src = './libs/img/icon.JPG';
+        img.src = './libs/img/calc.png';
         user.appendChild(img);
         divHeader.appendChild(user);
         var name = document.createElement('a');

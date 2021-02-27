@@ -107,9 +107,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" style="padding: 10px 0;">
+                    <div class="row" style="padding: 30px 0;">
                         <div class="col-sm-12">
-                            <button class="btn btn-default pull-right" ng-click="onClickConfirmarMovimento(selecionado)" ng-disabled="formDetalhes.$invalid">Salvar</button>
+                            <button ng-if="selecionado.status!=='CONFIRMADO'"
+                                class="btn btn-primary btn-block btn-lg" 
+                                ng-click="onClickConfirmarMovimento(selecionado)" 
+                                ng-disabled="formDetalhes.$invalid">Confirmar
+                            </button>
+                            <button ng-if="selecionado.status==='CONFIRMADO'"
+                                class="btn btn-danger btn-block btn-lg" 
+                                ng-click="onClickCancelarMovimento(selecionado)" 
+                                ng-disabled="formDetalhes.$invalid">Cancelar Confirmação
+                            </button>
                         </div>
                     </div>
                 </form>

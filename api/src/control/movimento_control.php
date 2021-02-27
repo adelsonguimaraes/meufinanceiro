@@ -20,6 +20,9 @@ Class movimento_control {
 	function atualizar () {
 		return $this->objDAO->atualizar($this->obj);
 	}
+	function atualizarCartao($idmovimento, $idcartao) {
+		return $this->objDAO->atualizarCartao($idmovimento, $idcartao);
+	}
 	function buscarPorId () {
 		return $this->objDAO->buscarPorId($this->obj);
 	}
