@@ -38,7 +38,7 @@ const MyMenu = {
         if (window === window.top) {
             var footer = document.createElement('div');
             footer.classList.add('footer');
-            // footer.innerHTML = '<span class="version"> v' +version + '</span><a ng-click="logout()"><i class="fa fa-power-off"></i> Deslogar</a>';
+            // footer.innerHTML = '<span class="version"> v' +version + '</span><a ng-click="logout()"><i class="fa fa-power-off"></i> Sair</a>';
             box.appendChild(footer);
         }
         

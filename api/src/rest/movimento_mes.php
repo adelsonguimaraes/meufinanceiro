@@ -10,31 +10,40 @@ function movimento_mes_cadastrar () {
 	$data = $_POST['data'];
 	$usuario = $_POST['usuario'];
 
-	// verifincando se já existe cadastro
-	// considerando idmovimento e data_corrente
-	$control = new movimento_mes_control();
-	$resp = $control->buscarPorMovimentoDataCorrente($data['idmovimento'], substr($data['data_corrente'], 0, 10));
-	if (!$resp['success']) die (json_encode($resp));
-	if (!empty($resp['data'])) {
-		$resp['success'] = false;
-		$resp['msg'] = "Erro, este movimento já foi confirmado!";
-		die(json_encode($resp));
+	$movimentos = array();
+	if (!empty($data['movimentos'])) {
+		foreach($data['movimentos'] as $key) {
+			$mov = $key;
+			$mov['valor_pago'] = $data['valor_mensal'];
+			$mov['data_pagamento'] = $data['data_pagamento'];
+			array_push($movimentos, $mov);
+		}
+	}else { 
+		array_push($movimentos, $data);
 	}
 
-	$obj = new movimento_mes();
-	$obj->setIdmovimento($data['idmovimento']);
-	$obj->setData_corrente(substr($data['data_corrente'], 0, 10));
-	$obj->setData_pagamento(substr($data['data_pagamento'], 0, 10));
-	$obj->setValor($data['valor_pago']);
-	$control = new movimento_mes_control($obj);
-	$response = $control->cadastrar();
-	if (!$response['success']) die(json_encode($response));
-	$idmovimento_mes = $response['data'];
+	foreach($movimentos as $key) {
 
-	if (intval($data['idcartao'])>0) {
+		// verifincando se já existe cadastro
+		// considerando idmovimento e data_corrente
 		$control = new movimento_mes_control();
-		$resp = $control->atualizarCartao($idmovimento_mes, $data['idcartao']);
-		if (!$resp['success']) die(json_encode($resp));
+		$resp = $control->buscarPorMovimentoDataCorrente($key['id'], substr($key['data_corrente'], 0, 10));
+		if (!$resp['success']) die (json_encode($resp));
+		if (!empty($resp['data'])) {
+			$resp['success'] = false;
+			$resp['msg'] = "Erro, este movimento já foi confirmado!";
+			die(json_encode($resp));
+		}
+
+		$obj = new movimento_mes();
+		$obj->setIdmovimento($key['id']);
+		$obj->setData_corrente(substr($key['data_corrente'], 0, 10));
+		$obj->setData_pagamento(substr($key['data_pagamento'], 0, 10));
+		$obj->setValor($key['valor_pago']);
+		$control = new movimento_mes_control($obj);
+		$response = $control->cadastrar();
+		if (!$response['success']) die(json_encode($response));
+		$idmovimento_mes = $response['data'];
 	}
 
 	echo json_encode($response);
@@ -111,12 +120,24 @@ function movimento_mes_desativar () {
 	$response = $control->desativar($data['idagenda']);
 	echo json_encode($response);
 }
-function movimento_mes_deletar () {
+function movimento_mes_remover () {
 	$data = $_POST['data'];
-	$banco = new movimento_mes();
-	$banco->setId($data['id']);
-	$control = new movimento_mes_control($banco);
-	echo json_encode($control->deletar());
+
+
+	$movimentos = array();
+	if (!empty($data['movimentos'])) $movimentos = $data['movimentos'];
+	else array_push($movimentos, $data);
+
+	foreach($movimentos as $key) {
+		$control = new movimento_mes_control(new movimento_mes($key['idmovimento_mes']));
+		$resp = $control->remover();
+		if (!$resp['success']) die(json_encode($resp));
+	}
+
+	$resp['success'] = true;
+	$resp['data'] = true;
+
+	echo json_encode($resp);
 }
 
 

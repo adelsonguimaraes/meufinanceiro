@@ -83,7 +83,7 @@
                         <div class="row">
                             <div class="col-sm-6">
                                 <label for="tipo">Tipo <span class="importante">*</span></label>
-                                <select name="tipo" class="form-control" ng-model="obj.tipo" ng-required="true">
+                                <select name="tipo" class="form-control" ng-model="obj.tipo" ng-disabled="obj.idcartao>0" ng-required="true">
                                     <option value="">Selecione o tipo</option>
                                     <option value="RECEBIMENTO">RECEBIMENTO</option>
                                     <option value="PAGAMENTO">PAGAMENTO</option>
@@ -91,7 +91,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <label for="idcartao">Cartão <span class="importante">*</span></label>
-                                <select name="idcartao" class="form-control" ng-model="obj.idcartao" ng-options="obj.id as (obj.nome + ' - ' + obj.final) for obj in cartoes" ng-required="true">
+                                <select name="idcartao" class="form-control" ng-model="obj.idcartao" ng-options="obj.id as (obj.nome + ' - ' + obj.final) for obj in cartoes" ng-change="selecionaCartao(obj)" ng-required="true">
                                     <option value="">Selecione o cartão</option>
                                 </select>
                             </div>

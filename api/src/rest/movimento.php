@@ -11,7 +11,8 @@ function movimento_cadastrar () {
 	$usuario = $_POST['usuario'];
 
 	$obj = new movimento();
-	$obj->setIdUsuario($data['idusuario']);
+	$obj->setIdusuario($data['idusuario']);
+	$obj->setIdcartao((intval($data['idcartao']<=0) ? null : $data['idcartao'] ));
 	$obj->setNome($data['nome']);
 	$obj->setDescricao($data['descricao']);
 	$obj->setValor_mensal($data['valor_mensal']);
@@ -23,11 +24,11 @@ function movimento_cadastrar () {
 	if (!$response['success']) die(json_encode($response));
 	$idmovimento = $response['data'];
 
-	if (intval($data['idcartao'])>0) {
-		$control = new movimento_control();
-		$resp = $control->atualizarCartao($idmovimento, $data['idcartao']);
-		if (!$resp['success']) die(json_encode($resp));
-	}
+	// if (intval($data['idcartao'])>0) {
+	// 	$control = new movimento_control();
+	// 	$resp = $control->atualizarCartao($idmovimento, $data['idcartao']);
+	// 	if (!$resp['success']) die(json_encode($resp));
+	// }
 
 	echo json_encode($response);
 }
@@ -37,7 +38,8 @@ function movimento_atualizar () {
 
 	$obj = new movimento();
 	$obj->setId($data['id']);
-	$obj->setIdUsuario($data['idusuario']);
+	$obj->setIdusuario($data['idusuario']);
+	$obj->setIdcartao((intval($data['idcartao']<=0) ? null : $data['idcartao'] ));
 	$obj->setNome($data['nome']);
 	$obj->setDescricao($data['descricao']);
 	$obj->setValor_mensal($data['valor_mensal']);
@@ -48,11 +50,11 @@ function movimento_atualizar () {
 	$response = $control->atualizar();
 	if (!$response['success']) die(json_encode($response));
 
-	if (intval($data['idcartao'])>0) {
-		$control = new movimento_control();
-		$resp = $control->atualizarCartao($data['id'], $data['idcartao']);
-		if (!$resp['success']) die(json_encode($resp));
-	}
+	// if (intval($data['idcartao'])>0) {
+	// 	$control = new movimento_control();
+	// 	$resp = $control->atualizarCartao($data['id'], $data['idcartao']);
+	// 	if (!$resp['success']) die(json_encode($resp));
+	// }
 
 	echo json_encode($response);
 }

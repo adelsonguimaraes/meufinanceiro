@@ -35,8 +35,8 @@ Class movimento_mes_control {
 	function desativar ($idagenda) {
 		return $this->objDAO->desativar($idagenda);
 	}
-	function deletar () {
-		return $this->objDAO->deletar($this->obj);
+	function remover () {
+		return $this->objDAO->remover($this->obj);
 	}
 	function listarPaginado ($idusuario, $start, $limit) {
 		return $this->objDAO->listarPaginado($idusuario, $start, $limit);

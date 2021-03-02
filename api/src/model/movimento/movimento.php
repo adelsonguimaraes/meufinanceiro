@@ -13,6 +13,7 @@ Class movimento implements JsonSerializable {
 	//atributos
 	private $id;
 	private $idusuario;
+	private $idcartao;
 	private $nome;
 	private $descricao;
 	private $valor_mensal;
@@ -28,6 +29,7 @@ Class movimento implements JsonSerializable {
 	(
 		$id = NULL,
 		$idusuario = NULL,
+		$idcartao = NULL,
 		$nome = NULL,
 		$descricao = NULL,
 		$valor_mensal = NULL,
@@ -41,6 +43,7 @@ Class movimento implements JsonSerializable {
 	{
 		$this->id	= $id;
 		$this->idusuario = $idusuario;
+		$this->idcartao = $idcartao;
 		$this->nome	= $nome;
 		$this->descricao	= $descricao;
 		$this->valor_mensal = $valor_mensal;
@@ -65,6 +68,13 @@ Class movimento implements JsonSerializable {
 	}
 	public function setIdusuario($idusuario) {
 		$this->idusuario = $idusuario;
+		return $this;
+	}
+	public function getIdcartao() {
+		return $this->idcartao;
+	}
+	public function setIdcartao($idcartao) {
+		$this->idcartao = $idcartao;
 		return $this;
 	}
 	public function getNome() {
@@ -136,6 +146,7 @@ Class movimento implements JsonSerializable {
 		return [
 			"id"	=> $this->id,
 			"idusuario" => $this->idusuario,
+			"idcartao" => $this->idcartao,
 			"nome"	=> $this->nome,
 			"descricao"	=> $this->descricao,
 			"valor_mensal" => $this->valor_mensal,

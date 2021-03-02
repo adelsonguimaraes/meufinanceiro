@@ -146,82 +146,8 @@ Class movimento_mes_dao {
 		return $this->superdao->getResponse();
 	}
 
-	// passando um mês ano para compar se a data_inicial somada a quantidade de meses é > que o mes ano informado
-	function listarPorMesAno ($idusuario, $data) {
-
-		$where = "WHERE m.idusuario = {$idusuario} AND
-		-- onde a data de (movimento_mes + parcelas) seja maior que a data corrente
-		(DATE_FORMAT(DATE_ADD(data_inicial,INTERVAL m.quantidade_parcela MONTH), '%m%Y') > 
-		DATE_FORMAT(DATE('{$data}'), '%m%Y') OR m.quantidade_parcela<=0)";
-
-
-		$this->sql = "SELECT m.*, 
-		-- data corrente
-		CONCAT(DATE_FORMAT('{$data}', '%Y-%m-'), DATE_FORMAT(m.data_inicial, '%d')) AS 'data_corrente',
-		-- dia e mes corrente
-		CONCAT(DATE_FORMAT(m.data_inicial, '%d'), ' ', UPPER(SUBSTR(MONTHNAME('{$data}'), 1, 3))) AS 'dia_mes',
-		-- parcela corrente
-		IF(m.quantidade_parcela<=0, '',
-			CONCAT(
-				m.quantidade_parcela -
-				TIMESTAMPDIFF(
-					MONTH, 
-					'{$data}',
-					DATE_ADD(m.data_inicial, INTERVAL m.quantidade_parcela MONTH)
-				)+1, '/', m.quantidade_parcela
-			)
-		) AS 'parcela_corrente',
-		-- total recebimento mensal
-		IFNULL((SELECT SUM(m.valor_mensal)
-		FROM movimento_mes m
-		$where AND m.tipo='RECEBIMENTO'), 0) AS 'total_recebimento',
-		-- total pagamento mensal
-		IFNULL((SELECT SUM(m.valor_mensal)
-		FROM movimento_mes m
-		$where AND m.tipo='PAGAMENTO'), 0) AS 'total_pagamento',
-		-- total do liquido (recebimentos-pagamento)
-		IFNULL(
-			(IFNULL((SELECT SUM(m.valor_mensal)
-			FROM movimento_mes m
-			$where AND m.tipo='RECEBIMENTO'), 0) -
-			IFNULL((SELECT SUM(m.valor_mensal)
-			FROM movimento_mes m
-			$where AND m.tipo='PAGAMENTO'), 0)), 0
-		) AS 'total_liquido',
-		-- periodo mensal
-		CONCAT(
-			'De 01 ', 
-			UPPER(SUBSTRING(MONTHNAME('{$data}'), 1, 3)), 
-			' até ', 
-			DATE_FORMAT(LAST_DAY('{$data}'), '%d'),
-			' ',
-			UPPER(SUBSTRING(MONTHNAME('{$data}'), 1, 3))
-		) AS 'periodo'
-		FROM movimento_mes m
-		$where
-		-- ordenando pela data corrente
-		ORDER BY data_corrente ASC";
-
-		$result = mysqli_query ( $this->con, $this->sql );
-
-		$this->superdao->resetResponse();
-
-		if ( !$result ) {
-			$this->superdao->setMsg( resolve( mysqli_errno( $this->con ), mysqli_error( $this->con ), 'movimento_mes' , 'ListarPorMesAno' ) );
-		}else{
-			while ( $row = mysqli_fetch_assoc ( $result ) ) {
-				array_push( $this->lista, $row);
-			}
-
-			$this->superdao->setSuccess( true );
-			$this->superdao->setData( $this->lista );
-		}
-
-		return $this->superdao->getResponse();
-	}
-
 	//deletar
-	function deletar (movimento_mes $obj) {
+	function remover (movimento_mes $obj) {
 		$this->superdao->resetResponse();
 
 		// buscando por dependentes
