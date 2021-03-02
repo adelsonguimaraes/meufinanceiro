@@ -126,8 +126,10 @@ Class movimento_dao {
 
 	//listar paginado
 	function listarPaginado($idusuario, $start, $limit) {
-		$this->sql = "SELECT m.*
+		$this->sql = "SELECT m.*, c.nome AS 'cartao_nome', 
+		c.dia_vencimento AS 'cartao_dia_vencimento', c.final AS 'cartao_final'
 		FROM movimento m
+		LEFT JOIN cartao c ON c.id = m.idcartao
 		WHERE m.idusuario = {$idusuario}
 		limit {$start}, {$limit}";
 		$result = mysqli_query ( $this->con, $this->sql );

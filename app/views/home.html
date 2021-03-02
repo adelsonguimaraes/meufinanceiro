@@ -15,7 +15,7 @@
         </div>
         <ul>
             <li ng-repeat="obj in movimentos" ng-class="[{'confirmado': obj.status==='CONFIRMADO'}, {'atrasado': obj.status==='ATRASADO'}]"  ng-click="onClickValue(obj)">
-                <span><i class="fa fa-circle"></i></span>
+                <span><i class="fa" ng-class="obj.movimentos.length>0 ? 'fa-credit-card' : 'fa-circle'"></i></span>
                 <a class="data">{{obj.dia_mes}} </a>
                 <a class="descricao">{{obj.nome + ' ' + obj.parcela_corrente}}</a>
                 <a class="valor"> 
@@ -88,7 +88,20 @@
                     </li>
                 </ul>
             </div>
-            <!-- <div>Sub</div> -->
+
+            <div class="sub-list" ng-if="selecionado.movimentos.length>0">
+                <div class="header">itens do cartão</div>
+                <ul>
+                    <li ng-repeat="sub in selecionado.movimentos">
+                        <a class="data">{{sub.dia_mes}} </a>
+                        <a class="descricao">{{sub.nome + ' ' + sub.parcela_corrente}}</a>
+                        <a class="valor"> 
+                            - {{sub.valor_mensal | moeda}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
             <div class="formulario">
                 <form name="formDetalhes">
                     <div class="row">
