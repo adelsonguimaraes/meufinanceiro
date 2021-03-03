@@ -250,7 +250,7 @@
 }
 .detalhes > .content .sub-list > ul > li {
     display: grid;
-    grid-template-columns: 20% 60% 20%;
+    grid-template-columns: 15% 57% 95px;
     padding: 5px;
     text-align: center;
 }
