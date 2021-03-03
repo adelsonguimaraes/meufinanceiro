@@ -11,7 +11,7 @@ Class conexao {
 	private $con;
 
 	protected function __construct () {
-		// $this->con = mysqli_connect("mysql.adelsonguimaraes.com.br","adelsonguimarae4","1ncubu5@2019", "adelsonguimaraes4");
+		// $this->con = mysqli_connect("mysql4.adelsonguimaraes.com.br","adelsonguimarae2","M3uf1n4nc31r0@2021", "adelsonguimaraes2");
 		$this->con = mysqli_connect("localhost","root","", "meufinanceiro");
 		if (mysqli_connect_error()) {
 			echo "Falha na conexão com MySQL: " . mysqli_connect_error();

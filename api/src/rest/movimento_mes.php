@@ -11,11 +11,13 @@ function movimento_mes_cadastrar () {
 	$usuario = $_POST['usuario'];
 
 	$movimentos = array();
+	// caso seja um cartão e tenha os movimentos
 	if (!empty($data['movimentos'])) {
 		foreach($data['movimentos'] as $key) {
 			$mov = $key;
-			$mov['valor_pago'] = $data['valor_mensal'];
+			$mov['valor_pago'] = $key['valor_mensal'];
 			$mov['data_pagamento'] = $data['data_pagamento'];
+			$mov['observacao'] = $data['observacao'];
 			array_push($movimentos, $mov);
 		}
 	}else { 
@@ -40,6 +42,7 @@ function movimento_mes_cadastrar () {
 		$obj->setData_corrente(substr($key['data_corrente'], 0, 10));
 		$obj->setData_pagamento(substr($key['data_pagamento'], 0, 10));
 		$obj->setValor($key['valor_pago']);
+		$obj->setObservacao($key['observacao']);
 		$control = new movimento_mes_control($obj);
 		$response = $control->cadastrar();
 		if (!$response['success']) die(json_encode($response));

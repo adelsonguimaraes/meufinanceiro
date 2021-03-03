@@ -12,7 +12,7 @@ function movimento_cadastrar () {
 
 	$obj = new movimento();
 	$obj->setIdusuario($data['idusuario']);
-	$obj->setIdcartao((intval($data['idcartao']<=0) ? null : $data['idcartao'] ));
+	$obj->setIdcartao((intval($data['idcartao']<=0) ? 'null' : $data['idcartao'] ));
 	$obj->setNome($data['nome']);
 	$obj->setDescricao($data['descricao']);
 	$obj->setValor_mensal($data['valor_mensal']);
@@ -39,7 +39,7 @@ function movimento_atualizar () {
 	$obj = new movimento();
 	$obj->setId($data['id']);
 	$obj->setIdusuario($data['idusuario']);
-	$obj->setIdcartao((intval($data['idcartao']<=0) ? null : $data['idcartao'] ));
+	$obj->setIdcartao((intval($data['idcartao']<=0) ? 'null' : $data['idcartao']));
 	$obj->setNome($data['nome']);
 	$obj->setDescricao($data['descricao']);
 	$obj->setValor_mensal($data['valor_mensal']);
@@ -120,19 +120,29 @@ function movimento_listarPorMesAno () {
 					"dia_mes"=> ($key['cartao_dia_vencimento'] . ' ' . substr($key['dia_mes'], -3)),
 					"parcela_corrente"=> "",
 					"status"=> $key['status'],
-					"total_recebimento"=> $key['total_recebimento'],
-					"total_pagamento"=> $key['total_pagamento'],
-					"total_liquido"=> $key['total_liquido'],
+					"total_recebimento"=> $movimentos[0]['total_recebimento'],
+					"total_pagamento"=> $movimentos[0]['total_pagamento'],
+					"total_liquido"=> $movimentos[0]['total_liquido'],
 					"periodo"=> $key['periodo'],
+					"valor_pago"=> 0,
+					"data_pagamento"=> $key['data_pagamento'],
+					"observacao"=> $key['observacao'],
 					"movimentos"=> array()
 				));
 				$index = array_search($key['idcartao'], array_column($cards, 'identificador_cartao'));
 			}
 			// somando o valor mensal
+			$cards[$index]['valor_pago'] += $key['valor_pago'];
+			// $cards[$index]['valor_mensal'] += ($key['valor_pago']>0) ? $key['valor_pago'] : $key['valor_mensal'];
 			$cards[$index]['valor_mensal'] += $key['valor_mensal'];
 			array_push($cards[$index]['movimentos'], $key);
 		}else{
-			array_push($movs, $key);
+			$obj = $key;
+			// $obj['valor_mensal'] = ($key['valor_pago']>0) ? $key['valor_pago'] : $key['valor_mensal'];
+			$obj["total_recebimento"] = $movimentos[0]['total_recebimento'];
+			$obj["total_pagamento"] = $movimentos[0]['total_pagamento'];
+			$obj["total_liquido"] = $movimentos[0]['total_liquido'];
+			array_push($movs, $obj);
 		}
 	}
 

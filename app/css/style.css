@@ -17,6 +17,8 @@ body {
     /* position: fixed; */
     /* background-blend-mode: overlay;
     background-color: #e7e6f185; */
+    font-family: Trebuchet MS, sans-serif;
+    font-stretch: ultra-condensed;
 }
 .box {
     width: 100%;

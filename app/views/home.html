@@ -1,5 +1,14 @@
 <div ng-include="'app/views/common/header.html'"></div>
-<div class="box-timeline">
+<div ng-if="meses.length<=0" style="
+padding: 150px 45px;
+font-size: 22px;
+font-weight: bold;
+background: whitesmoke;
+height: 100vh;
+text-align: center;">
+    Olá <span style="color:#699638;">{{usuario.nome}}!</span> <br>Você ainda não possui nenhum movimento cadastrado! Para exibir sua Timeline <a href="#/movimento">clique aqui</a> e cadastre movimentos!
+</div>
+<div class="box-timeline" ng-if="meses.length>0">
     <div class="timeline-mes" slider_horizontal>
         <div class="content" ng-repeat="obj in meses" ng-class="{'content-active': obj.ativo==='SIM'}" ng-click="onClickMes(obj)">
             <div class="mes">{{obj.mes_ano}}</div>
@@ -17,11 +26,11 @@
             <li ng-repeat="obj in movimentos" ng-class="[{'confirmado': obj.status==='CONFIRMADO'}, {'atrasado': obj.status==='ATRASADO'}]"  ng-click="onClickValue(obj)">
                 <span><i class="fa" ng-class="obj.movimentos.length>0 ? 'fa-credit-card' : 'fa-circle'"></i></span>
                 <a class="data">{{obj.dia_mes}} </a>
-                <a class="descricao">{{obj.nome + ' ' + obj.parcela_corrente}}</a>
+                <a class="descricao">{{obj.nome + obj.parcela_corrente}}</a>
                 <a class="valor"> 
                     <span ng-if="obj.tipo==='RECEBIMENTO'">+</span>
                     <span ng-if="obj.tipo==='PAGAMENTO'">-</span>
-                        {{obj.valor_mensal | moeda}}
+                        {{(obj.valor_pago>0) ? obj.valor_pago : obj.valor_mensal | moeda}}
                 </a>
             </li>
             
@@ -89,15 +98,14 @@
                 </ul>
             </div>
 
-            <div class="sub-list" ng-if="selecionado.movimentos.length>0">
+            <div class="sub-list" ng-if="selecionado.movimentos!==undefined">
                 <div class="header">itens do cartão</div>
                 <ul>
                     <li ng-repeat="sub in selecionado.movimentos">
                         <a class="data">{{sub.dia_mes}} </a>
-                        <a class="descricao">{{sub.nome + ' ' + sub.parcela_corrente}}</a>
-                        <a class="valor"> 
-                            - {{sub.valor_mensal | moeda}}
-                        </a>
+                        <a class="descricao">{{sub.nome + sub.parcela_corrente}}</a>
+                        <a class="valor" ng-if="sub.status==='CONFIRMADO'"> {{sub.valor_mensal | moeda}} </a>
+                        <input type="tel" class="form-control" style="height: 25px !important;" name="valor_mensal" mascara-moeda ng-if="sub.status!=='CONFIRMADO'" ng-keyup="setSubValue()" ng-model="sub.valor_mensal">
                     </li>
                 </ul>
             </div>
@@ -109,13 +117,19 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <label for="data_pagamento">Data Pagamento <span class="importante">*</span></label>
-                                    <input type="date" class="form-control" name="data_pagamento" ng-model="selecionado.data_pagamento" ng-required="true">
+                                    <input type="date" class="form-control" name="data_pagamento" ng-model="selecionado.data_pagamento" ng-disabled="selecionado.status==='CONFIRMADO'" ng-required="true">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-12">
                                     <label for="valor_pago">Valor Pago <span class="importante">*</span></label>
-                                    <input type="tel" class="form-control" mascara-moeda name="valor_pago" ng-model="selecionado.valor_pago" placeholder="Valor atualizado" ng-required="true">
+                                    <input type="tel" class="form-control" mascara-moeda name="valor_pago" ng-model="selecionado.valor_pago" placeholder="Valor atualizado" ng-disabled="selecionado.status==='CONFIRMADO' || selecionado.movimentos!==undefined" ng-required="true">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label for="observacao">Observação</label>
+                                    <input type="text" class="form-control" name="observacao" ng-model="selecionado.observacao" placeholder="Informe uma observação caso necessário" ng-disabled="selecionado.status==='CONFIRMADO'" ng-required="false">
                                 </div>
                             </div>
                         </div>

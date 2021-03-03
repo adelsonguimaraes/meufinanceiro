@@ -17,12 +17,13 @@ Class movimento_mes_dao {
 	//cadastrar
 	function cadastrar (movimento_mes $obj) {
 
-		$this->sql = sprintf("INSERT INTO movimento_mes(idmovimento, valor, data_corrente, data_pagamento)
-		VALUES(%d, %f, '%s', '%s')",
+		$this->sql = sprintf("INSERT INTO movimento_mes(idmovimento, valor, data_corrente, data_pagamento, observacao)
+		VALUES(%d, %f, '%s', '%s', '%s')",
 			mysqli_real_escape_string($this->con, $obj->getIdmovimento()),
 			mysqli_real_escape_string($this->con, $obj->getValor()),
 			mysqli_real_escape_string($this->con, $obj->getData_corrente()),
-			mysqli_real_escape_string($this->con, $obj->getData_pagamento())
+			mysqli_real_escape_string($this->con, $obj->getData_pagamento()),
+			mysqli_real_escape_string($this->con, $obj->getObservacao())
 		);
 		$this->superdao->resetResponse();
 
@@ -40,11 +41,12 @@ Class movimento_mes_dao {
 	//atualizar
 	function atualizar (movimento_mes $obj) {
 
-		$this->sql = sprintf("UPDATE movimento_mes SET idmovimento = %d, valor = %f, data_corrente = '%s', data_pagamento = '%s', data_edicao = '%s' WHERE id = %d ",
-		mysqli_real_escape_string($this->con, $obj->getIdmovimento()),
-		mysqli_real_escape_string($this->con, $obj->getValor()),
-		mysqli_real_escape_string($this->con, $obj->getData_corrente()),
-		mysqli_real_escape_string($this->con, $obj->getData_pagamento()),
+		$this->sql = sprintf("UPDATE movimento_mes SET idmovimento = %d, valor = %f, data_corrente = '%s', data_pagamento = '%s', observacao = '%s', data_edicao = '%s' WHERE id = %d ",
+			mysqli_real_escape_string($this->con, $obj->getIdmovimento()),
+			mysqli_real_escape_string($this->con, $obj->getValor()),
+			mysqli_real_escape_string($this->con, $obj->getData_corrente()),
+			mysqli_real_escape_string($this->con, $obj->getData_pagamento()),
+			mysqli_real_escape_string($this->con, $obj->getObservacao()),
 			mysqli_real_escape_string($this->con, date('Y-m-d H:i:s')),
 			mysqli_real_escape_string($this->con, $obj->getId()));
 		$this->superdao->resetResponse();

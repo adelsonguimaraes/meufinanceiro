@@ -112,7 +112,7 @@ function datahora ($timeout) {
 
 function moeda () {
     return function (input) {
-        if(!input || typeof(input) === 'object') return input;
+        if(typeof(input) === 'object') return input;
         return formataValor(input);
     }
 }

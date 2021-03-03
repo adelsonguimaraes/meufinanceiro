@@ -7,6 +7,7 @@ Class movimento_mes implements JsonSerializable {
 	private $valor;
 	private $data_corrente;
 	private $data_pagamento;
+	private $observacao;
 	private $data_cadastro;
 	private $data_edicao;
 
@@ -18,6 +19,7 @@ Class movimento_mes implements JsonSerializable {
 		$valor = NULL,
 		$data_corrente = NULL,
 		$data_pagamento = NULL,
+		$observacao = NULL,
 		$data_cadastro = NULL,
 		$data_edicao = NULL
 	)
@@ -27,6 +29,7 @@ Class movimento_mes implements JsonSerializable {
 		$this->valor	= $valor;
 		$this->data_corrente	= $data_corrente;
 		$this->data_corrente = $data_pagamento;
+		$this->observacao = $observacao;
 		$this->data_cadastro	= $data_cadastro;
 		$this->data_edicao	= $data_edicao;
 	}
@@ -67,6 +70,13 @@ Class movimento_mes implements JsonSerializable {
 		$this->data_pagamento = $data_pagamento;
 		return $this;
 	}
+	public function getObservacao() {
+		return $this->observacao;
+	}
+	public function setObservacao($observacao) {
+		$this->observacao = $observacao;
+		return $this;
+	}
 	public function getData_cadastro() {
 		return $this->data_cadastro;
 	}
@@ -90,6 +100,7 @@ Class movimento_mes implements JsonSerializable {
 			"valor"	=> $this->valor,
 			"data_corrente"	=> $this->data_corrente,
 			"data_pagamento"	=> $this->data_pagamento,
+			"observacao" => $this->observacao,
 			"data_cadastro"	=> $this->data_cadastro,
 			"data_edicao"	=> $this->data_edicao
 		];

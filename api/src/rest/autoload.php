@@ -15,8 +15,8 @@ if (!is_array($_POST)) $_POST = json_decode($_POST, true);
 /*
 	Requires
 */
-require_once(__DIR__ . "/../../util/Conexao.php"); // Conexao
-require_once(__DIR__ . "/../../util/ResolveMysqlError.php"); // Resolve erros mysql
+require_once(__DIR__ . "/../../util/conexao.php"); // Conexao
+require_once(__DIR__ . "/../../util/resolve_mysql_error.php"); // Resolve erros mysql
 require_once(__DIR__ . "/../../util/uploadFiles.php"); //Upload images
 require_once(__DIR__ . "/../../util/EnviaEmail.php"); //Envia Email
 require_once(__DIR__ . "/../../util/GenericFunctions.php"); //Functions

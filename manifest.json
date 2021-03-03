@@ -1,6 +1,6 @@
 {
-    "name": "Incubus - Controle de Consultoria em Vendas",
-    "short_name": "Incubus",
+    "name": "Meu Financeiro - Sistema de controle financeiro pessoal",
+    "short_name": "Meu Financeiro",
     "icons": [
         {
             "src": "libs/img/icons/icon-128x128.png",
@@ -36,5 +36,5 @@
     "start_url": "index.html",
     "display": "standalone",
     "background_color": "#fff",
-    "theme_color": "#fff"
+    "theme_color": "#7faf4b"
 }
