@@ -9,7 +9,7 @@ text-align: center;">
     Olá <span style="color:#699638;">{{usuario.nome}}!</span> <br>Você ainda não possui nenhum movimento cadastrado! Para exibir sua Timeline <a href="#/movimento">clique aqui</a> e cadastre movimentos!
 </div>
 <div class="box-timeline" ng-if="meses.length>0">
-    <div class="timeline-mes" slider_horizontal>
+    <div class="timeline-mes" slider_horizontal___>
         <div class="content" ng-repeat="obj in meses" ng-class="{'content-active': obj.ativo==='SIM'}" ng-click="onClickMes(obj)">
             <div class="mes">{{obj.mes_ano}}</div>
             <div class="valor">

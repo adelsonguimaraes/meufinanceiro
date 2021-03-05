@@ -129,7 +129,7 @@ function movimento_listarPorMesAno () {
 					"observacao"=> $key['observacao'],
 					"movimentos"=> array()
 				));
-				$index = array_search($key['idcartao'], array_column($cards, 'identificador_cartao'));
+				$index = array_search($key['idcartao'], array_column($cards, 'idcartao'));
 			}
 			// somando o valor mensal
 			$cards[$index]['valor_pago'] += $key['valor_pago'];

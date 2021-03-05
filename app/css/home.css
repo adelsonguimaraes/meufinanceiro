@@ -253,6 +253,8 @@
     grid-template-columns: 15% 57% 95px;
     padding: 5px;
     text-align: center;
+    justify-content: center;
+    align-items: center;
 }
 .detalhes > .content .sub-list > ul > li > a {
     text-decoration: none;
