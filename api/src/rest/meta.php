@@ -15,6 +15,12 @@ function meta_cadastrar () {
 	$obj->setNome($data['nome']);
 	$obj->setDescricao($data['descricao']);
 	$obj->setValor_mensal($data['valor_mensal']);
+	$obj->setLink_1($data['link_1']);
+	$obj->setDescricao_link_1($data['descricao_link_1']);
+	$obj->setLink_2($data['link_2']);
+	$obj->setDescricao_link_2($data['descricao_link_2']);
+	$obj->setLink_3($data['link_3']);
+	$obj->setDescricao_link_3($data['descricao_link_3']);
 	$control = new meta_control($obj);
 
 	$response = $control->cadastrar();
@@ -30,6 +36,12 @@ function meta_atualizar () {
 	$obj->setNome($data['nome']);
 	$obj->setDescricao($data['descricao']);
 	$obj->setValor_mensal($data['valor_mensal']);
+	$obj->setLink_1($data['link_1']);
+	$obj->setDescricao_link_1($data['descricao_link_1']);
+	$obj->setLink_2($data['link_2']);
+	$obj->setDescricao_link_2($data['descricao_link_2']);
+	$obj->setLink_3($data['link_3']);
+	$obj->setDescricao_link_3($data['descricao_link_3']);
 	$control = new meta_control($obj);
 	$response = $control->atualizar();
 	echo json_encode($response);

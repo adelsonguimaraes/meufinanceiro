@@ -16,6 +16,12 @@ Class meta implements JsonSerializable {
 	private $nome;
 	private $descricao;
 	private $valor_mensal;
+	private $link_1;
+	private $descricao_link_1;
+	private $link_2;
+	private $descricao_link_2;
+	private $link_3;
+	private $descricao_link_3;
 	private $data_cadastro;
 	private $data_edicao;
 
@@ -27,6 +33,12 @@ Class meta implements JsonSerializable {
 		$nome = NULL,
 		$descricao = NULL,
 		$valor_mensal = NULL,
+		$link_1 = NULL,
+		$descricao_link_1 = NULL,
+		$link_2 = NULL,
+		$descricao_link_2 = NULL,
+		$link_3 = NULL,
+		$descricao_link_3 = NULL,
 		$data_cadastro = NULL,
 		$data_edicao = NULL
 	)
@@ -36,6 +48,12 @@ Class meta implements JsonSerializable {
 		$this->nome	= $nome;
 		$this->descricao	= $descricao;
 		$this->valor_mensal = $valor_mensal;
+		$this->link_1 = $link_1;
+		$this->descricao_link_1 = $descricao_link_1;
+		$this->link_2 = $link_2;
+		$this->descricao_link_2 = $descricao_link_2;
+		$this->link_3 = $link_3;
+		$this->descricao_link_3 = $descricao_link_3;
 		$this->data_cadastro	= $data_cadastro;
 		$this->data_edicao	= $data_edicao;
 	}
@@ -76,6 +94,48 @@ Class meta implements JsonSerializable {
 		$this->valor_mensal = $valor_mensal;
 		return $this;
 	}
+	public function getLink_1() {
+		return $this->link_1;
+	}
+	public function setLink_1($link_1) {
+		$this->link_1 = $link_1;
+		return $this;
+	}
+	public function getDescricao_link_1() {
+		return $this->descricao_link_1;
+	}
+	public function setDescricao_link_1($descricao_link_1) {
+		$this->descricao_link_1 = $descricao_link_1;
+		return $this;
+	}
+	public function getLink_2() {
+		return $this->link_2;
+	}
+	public function setLink_2($link_2) {
+		$this->link_2 = $link_2;
+		return $this;
+	}
+	public function getDescricao_link_2() {
+		return $this->descricao_link_2;
+	}
+	public function setDescricao_link_2($descricao_link_2) {
+		$this->descricao_link_2 = $descricao_link_2;
+		return $this;
+	}
+	public function getLink_3() {
+		return $this->link_3;
+	}
+	public function setLink_3($link_3) {
+		$this->link_3 = $link_3;
+		return $this;
+	}
+	public function getDescricao_link_3() {
+		return $this->descricao_link_3;
+	}
+	public function setDescricao_link_3($descricao_link_3) {
+		$this->descricao_link_3 = $descricao_link_3;
+		return $this;
+	}
 	public function getData_cadastro() {
 		return $this->data_cadastro;
 	}
@@ -99,6 +159,12 @@ Class meta implements JsonSerializable {
 			"nome"	=> $this->nome,
 			"descricao"	=> $this->descricao,
 			"valor_mensal" => $this->valor_mensal,
+			"link_1" => $this->link_1,
+			"descricao_link_1" => $this->descricao_link_1,
+			"link_2" => $this->link_2,
+			"descricao_link_2" => $this->descricao_link_2,
+			"link_3" => $this->link_3,
+			"descricao_link_3" => $this->descricao_link_3,
 			"data_cadastro"	=> $this->data_cadastro,
 			"data_edicao"	=> $this->data_edicao
 		];

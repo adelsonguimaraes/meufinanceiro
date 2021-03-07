@@ -80,7 +80,7 @@ function movimento_listarPaginado () {
 	$usuario = $_POST['usuario'];
 
 	$control = new movimento_control();
-	$response = $control->listarPaginado($usuario["idusuario"], $data["start"], $data["limit"]);
+	$response = $control->listarPaginado($usuario["idusuario"], $data["pagination"]);
 	echo json_encode($response);
 }
 
@@ -166,12 +166,22 @@ function movimento_desativar () {
 	$response = $control->desativar($data['idagenda']);
 	echo json_encode($response);
 }
-function movimento_deletar () {
+function movimento_remover () {
 	$data = $_POST['data'];
-	$banco = new movimento();
-	$banco->setId($data['id']);
-	$control = new movimento_control($banco);
-	echo json_encode($control->deletar());
+
+	// verificando se o movimento já possui confirmações
+	$control_movimento_mes = new movimento_mes_control();
+	$resp = $control_movimento_mes->listarPorMovimento($data['id']); // idmovimento
+	if (!$resp['success']) die (json_encode($resp));
+	if (!empty($resp['data'])) {
+		$resp['success'] = false;
+		$resp['msg'] = "Não é possível remover este movimento, pois já possui confirmações mensais! Use a opção de desativar.";
+		die (json_encode($resp));
+	}
+
+	$obj = new movimento($data['id']);
+	$control = new movimento_control($obj);
+	echo json_encode($control->remover());
 }
 
 

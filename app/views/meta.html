@@ -16,6 +16,9 @@
                         <td align="left" style="cursor: pointer;" ng-click="ordernar('id')">ID</i></span></td>
                         <td align="left" style="cursor: pointer;" ng-click="ordernar('nome')">Nome</td>
                         <td align="left" style="cursor: pointer;" ng-click="ordernar('valor_mensal')">Valor Mensal</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('link_1')">Link 1</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('link_2')">Link 2</td>
+                        <td align="left" style="cursor: pointer;" ng-click="ordernar('link_3')">Link 3</td>
                         <td align="left" style="cursor: pointer;" ng-click="ordernar('descricao')">Descrição</td>
                         <td align="left" style="cursor: pointer;" ng-click="ordernar('status')">Status</td>
                         <td align="left">Ações</td>
@@ -25,7 +28,10 @@
                     <tr ng-repeat="obj in metas | filter:filtro | orderBy:ordenador:reverse">
                         <td>{{obj.id}}</td>
                         <td>{{obj.nome}}</td>
-                        <td>{{obj.valor_mensal}}</td>
+                        <td>{{obj.valor_mensal | moeda}}</td>
+                        <td><a href="{{obj.link_1}}" target="_blank" ng-if="obj.link_1">{{obj.descricao_link_1 || 'Link 1'}}</a></td>
+                        <td><a href="{{obj.link_2}}" target="_blank" ng-if="obj.link_2">{{obj.descricao_link_2 || 'Link 2'}}</a></td>
+                        <td><a href="{{obj.link_3}}" target="_blank" ng-if="obj.link_3">{{obj.descricao_link_3 || 'Link 3'}}</a></td>
                         <td>{{obj.descricao}}</td>
                         <td>{{obj.status}}</td>
                         <td>
@@ -57,9 +63,39 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-sm-6">
+                                <label for="descricao_link_1">Descrição Link 1</label>
+                                <input type="text" class="form-control" name="descricao_link_1" ng-model="obj.descricao_link_1" placeholder="Descreva o link se necessário" ng-required="false">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="link_1">Link 1</label>
+                                <input type="text" class="form-control" name="link_1" ng-model="obj.link_1" placeholder="Adicione um link se necessário" ng-required="false">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="descricao_link_2">Descrição Link 2</label>
+                                <input type="text" class="form-control" name="descricao_link_2" ng-model="obj.descricao_link_2" placeholder="Descreva o link se necessário" ng-required="false">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="link_2">Link 2</label>
+                                <input type="text" class="form-control" name="link_2" ng-model="obj.link_2" placeholder="Adicione um link se queira" ng-required="false">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <label for="descricao_link_3">Descrição Link 3</label>
+                                <input type="text" class="form-control" name="descricao_link_3" ng-model="obj.descricao_link_3" placeholder="Descreva o link se necessário" ng-required="false">
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="link_3">Link 3</label>
+                                <input type="text" class="form-control" name="link_3" ng-model="obj.link_3" placeholder="Adicione um link se queira" ng-required="false">
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-sm-12">
                                 <label for="descricao">Descrição</label>
-                                <input type="text" class="form-control" name="descricao" ng-model="obj.descricao" placeholder="Descreva sua meta de forma clara" ng-required="false">
+                                <input type="text" class="form-control" name="descricao" ng-model="obj.descricao" placeholder="Descreva se necessário" ng-required="false">
                             </div>
                         </div>
                         <div class="row">

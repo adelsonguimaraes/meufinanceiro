@@ -1,12 +1,11 @@
 <div class="box">
     <div ng-include="'app/views/common/header.html'"></div>
-    <section ng-if="!novo" style="background: rgb(255 255 255 / 65%);">
+    <section ng-if="!novo" style="background: rgb(255 255 255 / 65%); margin-bottom: 35px;">
         <div style="display: flex;">
             <button class="btn btn-default" ng-click="cadNovo()"><i class="fa fa-plus"></i></button>
             <input type="text" class="form-control" ng-model="filtro" placeholder="Filtro">
             <input type="tel" class="form-control" ng-model="pagination.limit" style="width:50px;" so-numeros>
             <button class="btn btn-default" ng-click="filtrar()"><i class="fa fa-filter"></i></button>
-            <button class="btn btn-default" ng-click="listarClientes()"><i class="fa fa-refresh"></i></button>
         </div>
         
         <div class="table-responsive">
@@ -109,4 +108,17 @@
             </div>
         </div>
     </section>
+    <footer>
+        <div class="paginacao">
+            <button class="btn btn-default" ng-click="prev()"><</button>
+            <input type="text" name="paginas" ng-value="pagination.page + ' de ' + pagination.total_page" class="form-control" readonly>
+            <button class="btn btn-default" ng-click="next()">></button>
+            <select name="limit" class="form-control" ng-model="pagination.limit" ng-change="selectLimit()" ng-options="obj for obj in pagination.limits"></select>
+            <select name="active" class="form-control" ng-model="pagination.active" ng-change="selectActive()">
+                <option value="SIM">SIM</option>
+                <option value="NAO">NÃO</option>
+            </select>
+            <button class="btn btn-default" ng-click="refresh()"><i class="fa fa-refresh"></i></button>
+        </div>
+    </footer>
 </div>

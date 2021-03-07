@@ -17,12 +17,20 @@ Class meta_dao {
 	//cadastrar
 	function cadastrar (meta $obj) {
 
-		$this->sql = sprintf("INSERT INTO meta(idusuario, nome, descricao, valor_mensal)
-		VALUES(%d, '%s', '%s', %f)",
+		$this->sql = sprintf("INSERT INTO meta(idusuario, nome, descricao, valor_mensal, link_1, descricao_link_1, 
+		link_2, descricao_link_2, link_3, descricao_link_3)
+		VALUES(%d, '%s', '%s', %f, '%s', '%s', '%s', '%s', '%s', '%s')",
 			mysqli_real_escape_string($this->con, $obj->getIdusuario()),
 			mysqli_real_escape_string($this->con, $obj->getNome()),
 			mysqli_real_escape_string($this->con, $obj->getDescricao()),
-			mysqli_real_escape_string($this->con, $obj->getValor_mensal()));
+			mysqli_real_escape_string($this->con, $obj->getValor_mensal()),
+			mysqli_real_escape_string($this->con, $obj->getLink_1()),
+			mysqli_real_escape_string($this->con, $obj->getDescricao_link_1()),
+			mysqli_real_escape_string($this->con, $obj->getLink_2()),
+			mysqli_real_escape_string($this->con, $obj->getDescricao_link_2()),
+			mysqli_real_escape_string($this->con, $obj->getLink_3()),
+			mysqli_real_escape_string($this->con, $obj->getDescricao_link_3())
+		);
 		$this->superdao->resetResponse();
 
 		if(!mysqli_query($this->con, $this->sql)) {
@@ -39,11 +47,20 @@ Class meta_dao {
 	//atualizar
 	function atualizar (meta $obj) {
 
-		$this->sql = sprintf("UPDATE meta SET idusuario = %d, nome = '%s', descricao = '%s', valor_mensal = '%s', data_edicao = '%s' WHERE id = %d ",
+		$this->sql = sprintf("UPDATE meta SET idusuario = %d, nome = '%s', descricao = '%s', 
+		valor_mensal = '%s', link_1 = '%s', descricao_link_1 = '%s', link_2 = '%s', descricao_link_2 = '%s', 
+		link_3 = '%s', descricao_link_3 = '%s', data_edicao = '%s' 
+		WHERE id = %d ",
 			mysqli_real_escape_string($this->con, $obj->getIdusuario()),
 			mysqli_real_escape_string($this->con, $obj->getNome()),
 			mysqli_real_escape_string($this->con, $obj->getDescricao()),
 			mysqli_real_escape_string($this->con, $obj->getValor_mensal()),
+			mysqli_real_escape_string($this->con, $obj->getLink_1()),
+			mysqli_real_escape_string($this->con, $obj->getDescricao_link_1()),
+			mysqli_real_escape_string($this->con, $obj->getLink_2()),
+			mysqli_real_escape_string($this->con, $obj->getDescricao_link_2()),
+			mysqli_real_escape_string($this->con, $obj->getLink_3()),
+			mysqli_real_escape_string($this->con, $obj->getDescricao_link_3()),
 			mysqli_real_escape_string($this->con, date('Y-m-d H:i:s')),
 			mysqli_real_escape_string($this->con, $obj->getId()));
 		$this->superdao->resetResponse();

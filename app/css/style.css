@@ -63,3 +63,20 @@ header a {
 .importante {
     color: red;
 }
+
+/* paginacao */
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+}
+.paginacao {
+    display: flex;
+}
+.paginacao input {
+    width: 80px;
+}
+.paginacao select[name=active] {
+    width: 80px;
+}

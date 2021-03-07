@@ -32,6 +32,9 @@ Class movimento_mes_control {
 	function listarPorMesAno ($idusuario, $data) {
 		return $this->objDAO->listarPorMesAno ($idusuario, $data);
 	}
+	function listarPorMovimento ($idmovimento) {
+		return $this->objDAO->listarPorMovimento($idmovimento);
+	}
 	function desativar ($idagenda) {
 		return $this->objDAO->desativar($idagenda);
 	}

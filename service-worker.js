@@ -1,15 +1,16 @@
 importScripts('./libs/js/sw-cache-polyfill.js');
 
-let cacheName = 'dsp-v.1.0.0';
+let cacheName = 'meufinanceiro-v.1.0.0';
 let filesToCache = [
     // './',
     'index.html',
     'app.js?',
     'config.js',
-    // css
-    'app/css/cadvisitante.css',
+    // --- css
+    'app/css/style.css',
     'app/css/login.css',
-    //css plugin
+    'app/css/home.css',
+    // --- css plugin
     'libs/css/bootstrap/bootstrap.min.css',
     'libs/css/animate/animate.css',
     'libs/css/font-awesome/fonts/fontawesome-webfont.woff2',
@@ -20,36 +21,35 @@ let filesToCache = [
     'libs/js/plugins/oclazyload/dist/ocLazyLoad.min.js',
     'libs/js/ui-router/angular-ui-router.min.js',
     'libs/js/plugins/angular-idle/angular-idle.js',
-    // 'libs/js/plugins/number-picker/angular-number-picker.min.js',
     'libs/js/bootstrap/bootstrap.min.js',
     'libs/js/MD5.js',
     'libs/js/plugins/moment/moment.min.js',
     'libs/js/plugins/moment/moment-timezone.js',
-    // directives
+    // --- directives
     // 'libs/js/directives/directives.js',
-    // services
+    // --- services
     'app/services/authenticationAPIService.js',
     'app/services/genericAPIService.js',
-    // filters
+    // --- filters
     'app/filters/filters.js',
-    // images
+    // --- images
     'libs/img/ajax_loader_blue.gif',
-    'libs/img/enterprise.png',
+    'libs/img/calc.png',
     'libs/img/icons/icon-128x128.png',
     'libs/img/icons/icon-144x144.png',
     'libs/img/icons/icon-152x152.png',
     'libs/img/icons/icon-192x192.png',
     'libs/img/icons/icon-256x256.png',
     'libs/img/icons/icon-512x512.png',
-    // views
+    // --- views
     'app/views/login.html',
-    'app/views/cadvisitante.html',
-    // commons
+    'app/views/home.html',
+    // --- commons
     'app/views/common/header.html',
-    // // // controllers
+    // --- controllers
     'app/controllers/mainCtrl.js',
     'app/controllers/loginCtrl.js',
-    'app/controllers/cadvisitanteCtrl.js'
+    'app/controllers/homeCtrl.js'
 ];
 
 self.addEventListener('install', (e) => {

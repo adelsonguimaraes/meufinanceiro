@@ -38,11 +38,11 @@ Class movimento_control {
 	function desativar ($idagenda) {
 		return $this->objDAO->desativar($idagenda);
 	}
-	function deletar () {
-		return $this->objDAO->deletar($this->obj);
+	function remover () {
+		return $this->objDAO->remover($this->obj);
 	}
-	function listarPaginado ($idusuario, $start, $limit) {
-		return $this->objDAO->listarPaginado($idusuario, $start, $limit);
+	function listarPaginado ($idusuario, $pagination) {
+		return $this->objDAO->listarPaginado($idusuario, $pagination);
 	}
 	function qtdTotal () {
 		return $this->objDAO->qtdTotal();

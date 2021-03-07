@@ -127,13 +127,17 @@ Class movimento_dao {
 	}
 
 	//listar paginado
-	function listarPaginado($idusuario, $start, $limit) {
-		$this->sql = "SELECT m.*, c.nome AS 'cartao_nome', 
+	function listarPaginado($idusuario, $pagination) {
+
+		$where = "WHERE m.idusuario = {$idusuario}
+		AND m.ativo = \"{$pagination['active']}\"";
+
+		$this->sql = "SELECT m.*, c.nome AS 'cartao_nome',
 		c.dia_vencimento AS 'cartao_dia_vencimento', c.final AS 'cartao_final'
 		FROM movimento m
 		LEFT JOIN cartao c ON c.id = m.idcartao
-		WHERE m.idusuario = {$idusuario}
-		limit {$start}, {$limit}";
+		$where
+		limit {$pagination['start']}, {$pagination['limit']}";
 		$result = mysqli_query ( $this->con, $this->sql );
 
 		$this->superdao->resetResponse();
@@ -147,7 +151,7 @@ Class movimento_dao {
 
 			$this->superdao->setSuccess( true );
 			$this->superdao->setData( $this->lista );
-			$this->superdao->setTotal( $this->qtdTotal() );
+			$this->superdao->setTotal( $this->qtdTotal($where) );
 		}
 
 		return $this->superdao->getResponse();
@@ -421,7 +425,7 @@ Class movimento_dao {
 	}
 
 	//deletar
-	function deletar (movimento $obj) {
+	function remover (movimento $obj) {
 		$this->superdao->resetResponse();
 
 		// buscando por dependentes
@@ -447,8 +451,11 @@ Class movimento_dao {
 	}
 
 	//quantidade total
-	function qtdTotal() {
-		$this->sql = "SELECT count(*) as quantidade FROM movimento";
+	function qtdTotal($where) {
+		$this->sql = "SELECT count(*) AS quantidade
+		FROM movimento m
+		$where";
+
 		$result = mysqli_query ( $this->con, $this->sql );
 		if (! $result) {
 			die ( '[ERRO]: ' . mysqli_error ( $this->con ) );
