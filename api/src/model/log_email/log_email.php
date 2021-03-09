@@ -1,5 +1,5 @@
 <?php
-// model : logemail
+// model : log_email
 
 /*
 	Projeto: INCUBUS - Gestão de Consultoria de Vendas.
@@ -9,7 +9,7 @@
 	Data Atual: 08/08/2019.
 */
 
-Class Logemail implements JsonSerializable {
+Class log_email implements JsonSerializable {
 	//atributos
 	private $id;
 	private $idclasse;

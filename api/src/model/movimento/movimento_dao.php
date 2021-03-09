@@ -104,6 +104,25 @@ Class movimento_dao {
 		return $this->superdao->getResponse();
 	}
 
+	//buscar por nome
+	function buscarPorNome ($nome) {
+		$this->sql = "SELECT * FROM movimento WHERE nome = '{$nome}'";
+		$result = mysqli_query($this->con, $this->sql);
+
+		$this->superdao->resetResponse();
+
+		if(!$result) {
+			$this->superdao->setMsg( resolve( mysqli_errno( $this->con ), mysqli_error( $this->con ), get_class( $obj ), 'BuscarPorId' ) );
+		}else{
+			while($row = mysqli_fetch_assoc($result)) {
+				$this->obj = $row;
+			}
+			$this->superdao->setSuccess( true );
+			$this->superdao->setData( $this->obj );
+		}
+		return $this->superdao->getResponse();
+	}
+
 	//listar
 	function listar ($idusuario) {
 		$this->sql = "SELECT m.*
@@ -234,6 +253,48 @@ Class movimento_dao {
 		return $this->superdao->getResponse();
 	}
 
+	function getTotalMes ($idusuario, $data_corrente, $tipo) {
+		
+		$sql = "SELECT
+		SUM(
+			IF(
+				mm.id IS NULL,
+				m.valor_mensal,
+				mm.valor
+			)
+		) AS 'total'
+		FROM movimento m
+		LEFT JOIN movimento_mes mm ON mm.idmovimento = m.id
+		AND DATE_FORMAT(mm.data_corrente, '%Y%m') = DATE_FORMAT('{$data_corrente}', '%Y%m')
+		WHERE m.idusuario = {$idusuario}
+		AND m.ativo = 'SIM'
+		AND m.tipo = '{$tipo}'
+		-- DATA INICIAL <= DATA CORRENTE
+		AND DATE_FORMAT( m.data_inicial, '%Y%m') <=
+			DATE_FORMAT( '{$data_corrente}', '%Y%m')
+		-- DATA FINAL >= DATA CORRENTE
+		-- OU PARCELA = 0
+		AND (
+			DATE_FORMAT( DATE_ADD( m.data_inicial, INTERVAL m.quantidade_parcela MONTH ), '%Y%m') >=
+			DATE_FORMAT( '{$data_corrente}', '%Y%m')
+			OR m.quantidade_parcela = 0
+		)";
+
+		$result = mysqli_query ( $this->con, $sql );
+		$this->superdao->resetResponse();
+
+		if ( !$result ) {
+			$this->superdao->setMsg( resolve( mysqli_errno( $this->con ), mysqli_error( $this->con ), 'movimento' , 'getDataMinima' ) );
+		}else{
+			$row = mysqli_fetch_assoc ( $result );
+		}
+
+		$this->superdao->setSuccess( true );
+		$this->superdao->setData( $row['total'] );
+
+		return $this->superdao->getResponse();
+	}
+
 	function listarMesesTimeline ($idusuario) {
 		
 		// consultando o salto de meses pra timeline
@@ -335,15 +396,15 @@ Class movimento_dao {
 
 		$where = "WHERE (
 			m.idusuario = {$idusuario}
+			AND m.ativo = 'SIM'
+			-- ANOMES data_corrente >= ANOMES data_inicial
+			AND DATE_FORMAT('{$data_corrente}', '%Y%m') >= DATE_FORMAT(m.data_inicial, '%Y%m')
 			AND (
-				-- ANOMES data_corrente >= ANOMES data_inicial
 				-- E ANOMES data_corrente <= ANOMES data_final
-				DATE_FORMAT('{$data_corrente}', '%Y%m') >= DATE_FORMAT(m.data_inicial, '%Y%m')
-				AND (
-					(DATE_FORMAT('{$data_corrente}', '%Y%m') <= 
-					DATE_FORMAT(DATE_ADD(m.data_inicial, INTERVAL (m.quantidade_parcela-1) MONTH), '%Y%m'))
-					OR m.quantidade_parcela = 0
-				)
+				-- OU QUANTIDADE_PARCELA = ZERO
+				(DATE_FORMAT('{$data_corrente}', '%Y%m') <= 
+				DATE_FORMAT(DATE_ADD(m.data_inicial, INTERVAL (m.quantidade_parcela-1) MONTH), '%Y%m'))
+				OR m.quantidade_parcela = 0
 			)
 		)";
 
@@ -395,7 +456,9 @@ Class movimento_dao {
 		$where
 		-- ordenando pela data corrente
 		ORDER BY data_corrente ASC;";
-		
+
+		// echo $sql;
+		// exit;
 
 		$result = mysqli_query ( $this->con, $sql );
 
@@ -415,11 +478,58 @@ Class movimento_dao {
 
 			$lista[0]['total_pagamento'] = $total_pagamento;
 			$lista[0]['total_recebimento'] = $total_recebimento;
-			$lista[0]['total_liquido'] = ($total_recebimento - $total_pagamento);
-
+			$lista[0]['total_liquido'] = round($total_recebimento - $total_pagamento, 2);
+			
 			$this->superdao->setSuccess( true );
 			$this->superdao->setData( $lista );
 		}
+
+		return $this->superdao->getResponse();
+	}
+
+	function listarPorDiasVencimento ($dias_para_vencer) {
+		
+		$sql = "SELECT m.*, u.nome AS 'usuario', u.email,
+		CONCAT(DATE_FORMAT(CURDATE(), '%Y-%m'), DATE_FORMAT(m.data_inicial, '-%d')) as 'data_corrente'
+		FROM movimento m
+		INNER JOIN usuario u ON u.id = m.idusuario
+		LEFT JOIN movimento_mes mm ON mm.idmovimento = m.id
+		AND mm.data_corrente = CONCAT(DATE_FORMAT(CURDATE(), '%Y-%m-'), DATE_FORMAT(m.data_inicial, '%d'))
+		WHERE m.ativo = 'SIM'
+		AND mm.id IS NULL
+		AND (
+			(
+				DATE_FORMAT(m.data_inicial, '%Y%m') <= DATE_FORMAT(CURDATE(), '%Y%m')
+				AND DATE_FORMAT(DATE_ADD(m.data_inicial, INTERVAL m.quantidade_parcela MONTH), '%Y%m') >= DATE_FORMAT(CURDATE(), '%Y%m')
+			) OR
+			(
+				DATE_FORMAT(m.data_inicial, '%Y%m') <= DATE_FORMAT(CURDATE(), '%Y%m')
+				AND m.quantidade_parcela = 0
+			)
+		)
+		AND (
+			TIMESTAMPDIFF(
+				DAY,
+				CURDATE(),
+				CONCAT(DATE_FORMAT(CURDATE(), '%Y-%m'), DATE_FORMAT(m.data_inicial, '-%d'))
+			) = {$dias_para_vencer}
+		)";
+
+
+		$result = mysqli_query ( $this->con, $sql );
+		$this->superdao->resetResponse();
+
+		$lista = array();
+		if ( !$result ) {
+			$this->superdao->setMsg( resolve( mysqli_errno( $this->con ), mysqli_error( $this->con ), 'movimento' , 'getDataMinima' ) );
+		}else{
+			while ( $row = mysqli_fetch_assoc ( $result ) ) {
+				array_push( $lista, $row);
+			}
+		}
+
+		$this->superdao->setSuccess( true );
+		$this->superdao->setData( $lista );
 
 		return $this->superdao->getResponse();
 	}

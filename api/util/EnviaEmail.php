@@ -6,11 +6,12 @@ if (!function_exists("PHPMailer")) {
 }
 
 require_once(__DIR__ . "/../src/rest/autoload.php");
+require_once(__DIR__ . "/email_env.php");
 
 class EnviaEmail {
 	// atributos
-	private $usuario = 'incubus=adelsonguimaraes.com.br';
-	private $senha = 'incubus@2019';
+	private $usuario = EMAIL_USUARIO;
+	private $senha = EMAIL_SENHA;
 	private $remetente;
 	private $emails;
 	private $assunto;
@@ -80,7 +81,7 @@ class EnviaEmail {
 		// echo '<pre>';
 		if ( empty($this->emails) ) return false; // se não haver emails
 		
-		$Host = 'SMTP.adelsonguimaraes.com.br';//.substr(strstr($this->usuario, '@'), 1); //'mail.dominio.com.br';
+		$Host = EMAIL_HOST;//.substr(strstr($this->usuario, '@'), 1); //'mail.dominio.com.br';
 		$Username = $this->usuario;
 		$Password = $this->senha;
 		$Port = "587";
@@ -121,38 +122,49 @@ class EnviaEmail {
 			$mail->AddAttachment( $this->anexo );
 		}
 
+		$count_email = 0;
 		foreach ( $this->emails as $key ) {
-			$mail->AddAddress( trim($key), "" );
+			// verificando se o email já foi enviado
+			$control = new log_email_control();
+			$resp = $control->listarPorEmailConteudo (trim($key), $this->mensagem);
+			if (!$resp['success']) die(json_encode($resp));
+			if (empty($resp['data'])) {
+				$mail->AddAddress( trim($key), "" );
+				$count_email++;
+			}
 		}
 
-		// chamando a classe de email log
-		$obj = new Logemail();
-		$obj->setAssunto($this->assunto)
-			->setConteudo($this->mensagem)
-			->setDestinatario(implode(', ', $this->emails));
+		if ($count_email>0) {
 
-		if(!$mail->Send()) { // caso de erro
-			$response = $mail->ErrorInfo;
+			// chamando a classe de email log
+			$obj = new log_email();
+			$obj->setAssunto($this->assunto)
+				->setConteudo($this->mensagem)
+				->setDestinatario(implode(', ', $this->emails));
 
-			// salvando no log
-			$obj->setStatus('ERRO')
-				->setRetorno($mail->ErrorInfo);
-			$control = new LogemailControl($obj);
-			$resp = $control->cadastrar();
-			if ($resp['success']==false) return $resp;
+			if(!$mail->Send()) { // caso de erro
+				$response = $mail->ErrorInfo;
 
-		} else { // caso sucesso no envio
-			$response = true;
-			
-			// salvando no log
-			$obj->setStatus('ENVIADO')
-				->setRetorno("Email enviado com sucesso");
-			$control = new LogemailControl($obj);
-			$resp = $control->cadastrar();
-			if ($resp['success']==false) return $resp;
+				// salvando no log
+				$obj->setStatus('ERRO')
+					->setRetorno($mail->ErrorInfo);
+				$control = new log_email_control($obj);
+				$resp = $control->cadastrar();
+				if ($resp['success']==false) return $resp;
+
+			} else { // caso sucesso no envio
+				$response = true;
+				
+				// salvando no log
+				$obj->setStatus('ENVIADO')
+					->setRetorno("Email enviado com sucesso");
+				$control = new log_email_control($obj);
+				$resp = $control->cadastrar();
+				if ($resp['success']==false) return $resp;
+			}
+
+			return $response;
 		}
-
-		return $response;
 	}
 
 

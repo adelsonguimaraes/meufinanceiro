@@ -1,5 +1,5 @@
 <?php
-// control : logemail
+// control : log_email
 
 /*
 	Projeto: INCUBUS - Gestão de Consultoria de Vendas.
@@ -9,16 +9,16 @@
 	Data Atual: 08/08/2019.
 */
 
-Class LogemailControl {
+Class log_email_control {
 	//atributos
 	protected $con;
 	protected $obj;
 	protected $objDAO;
 
 	//construtor
-	public function __construct(Logemail $obj=NULL) {
+	public function __construct(log_email $obj=NULL) {
 		$this->con = conexao::getInstance()->getConexao();
-		$this->objDAO = new LogemailDAO($this->con);
+		$this->objDAO = new log_email_dao($this->con);
 		$this->obj = $obj;
 	}
 
@@ -31,6 +31,9 @@ Class LogemailControl {
 	}
 	function listar () {
 		return $this->objDAO->listar();
+	}
+	function listarPorEmailConteudo ($destinatario, $conteudo) {
+		return $this->objDAO->listarPorEmailConteudo ($destinatario, $conteudo);
 	}
 	function atualizar () {
 		return $this->objDAO->atualizar($this->obj);

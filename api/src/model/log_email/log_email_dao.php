@@ -1,5 +1,5 @@
 <?php
-// dao : logemail
+// dao : log_email
 
 /*
 	Projeto: INCUBUS - Gestão de Consultoria de Vendas.
@@ -9,7 +9,7 @@
 	Data Atual: 08/08/2019.
 */
 
-Class LogemailDAO {
+Class log_email_dao {
 	//atributos
 	private $con;
 	private $sql;
@@ -20,12 +20,12 @@ Class LogemailDAO {
 	//construtor
 	public function __construct($con) {
 		$this->con = $con;
-		$this->superdao = new super_dao('logemail');
+		$this->superdao = new super_dao('log_email');
 	}
 
 	//cadastrar
-	function cadastrar (logemail $obj) {
-		$this->sql = sprintf("INSERT INTO logemail(idclasse, classe, assunto, conteudo, destinatario, status, retorno)
+	function cadastrar (log_email $obj) {
+		$this->sql = sprintf("INSERT INTO log_email(idclasse, classe, assunto, conteudo, destinatario, status, retorno)
 		VALUES(%d, '%s', '%s', '%s', '%s', '%s', '%s')",
 			mysqli_real_escape_string($this->con, $obj->getIdclasse()),
 			mysqli_real_escape_string($this->con, $obj->getClasse()),
@@ -49,8 +49,8 @@ Class LogemailDAO {
 	}
 
 	//atualizar
-	function atualizar (Logemail $obj) {
-		$this->sql = sprintf("UPDATE logemail SET idclasse = %d, classe = '%s', assunto = '%s', conteudo = '%s', destinatario = '%s', status = '%s', retorno = '%s' WHERE id = %d ",
+	function atualizar (log_email $obj) {
+		$this->sql = sprintf("UPDATE log_email SET idclasse = %d, classe = '%s', assunto = '%s', conteudo = '%s', destinatario = '%s', status = '%s', retorno = '%s' WHERE id = %d ",
 			mysqli_real_escape_string($this->con, $obj->getIdclasse()),
 			mysqli_real_escape_string($this->con, $obj->getClasse()),
 			mysqli_real_escape_string($this->con, $obj->getAssunto()),
@@ -71,8 +71,8 @@ Class LogemailDAO {
 	}
 
 	//buscarPorId
-	function buscarPorId (Logemail $obj) {
-		$this->sql = sprintf("SELECT * FROM logemail WHERE id = %d",
+	function buscarPorId (log_email $obj) {
+		$this->sql = sprintf("SELECT * FROM log_email WHERE id = %d",
 			mysqli_real_escape_string($this->con, $obj->getId()));
 		$result = mysqli_query($this->con, $this->sql);
 
@@ -92,13 +92,13 @@ Class LogemailDAO {
 
 	//listar
 	function listar () {
-		$this->sql = "SELECT * FROM logemail";
+		$this->sql = "SELECT * FROM log_email";
 		$result = mysqli_query($this->con, $this->sql);
 
 		$this->superdao->resetResponse();
 
 		if(!$result) {
-			$this->superdao->setMsg( resolve( mysqli_errno( $this->con ), mysqli_error( $this->con ), 'Logemail' , 'Listar' ) );
+			$this->superdao->setMsg( resolve( mysqli_errno( $this->con ), mysqli_error( $this->con ), 'log_email' , 'Listar' ) );
 		}else{
 			while($row = mysqli_fetch_object($result)) {
 				array_push($this->lista, $row);
@@ -109,15 +109,36 @@ Class LogemailDAO {
 		return $this->superdao->getResponse();
 	}
 
+	//listar
+	function listarPorEmailConteudo ($destinatario, $conteudo) {
+		$this->sql = "SELECT * 
+		FROM log_email le
+		WHERE le.destinatario = '{$destinatario}' AND le.conteudo = '{$conteudo}'";
+		$result = mysqli_query($this->con, $this->sql);
+
+		$this->superdao->resetResponse();
+
+		if(!$result) {
+			$this->superdao->setMsg( resolve( mysqli_errno( $this->con ), mysqli_error( $this->con ), 'log_email' , 'Listar' ) );
+		}else{
+			while($row = mysqli_fetch_assoc($result)) {
+				array_push($this->lista, $row);
+			}
+			$this->superdao->setSuccess( true );
+			$this->superdao->setData( $this->lista );
+		}
+		return $this->superdao->getResponse();
+	}
+
 	//listar paginado
 	function listarPaginado($start, $limit) {
-		$this->sql = "SELECT * FROM logemail limit " . $start . ", " . $limit;
+		$this->sql = "SELECT * FROM log_email limit " . $start . ", " . $limit;
 		$result = mysqli_query ( $this->con, $this->sql );
 
 		$this->superdao->resetResponse();
 
 		if ( !$result ) {
-			$this->superdao->setMsg( resolve( mysqli_errno( $this->con ), mysqli_error( $this->con ), 'Logemail' , 'ListarPaginado' ) );
+			$this->superdao->setMsg( resolve( mysqli_errno( $this->con ), mysqli_error( $this->con ), 'log_email' , 'ListarPaginado' ) );
 		}else{
 			while ( $row = mysqli_fetch_assoc ( $result ) ) {				array_push( $this->lista, $row);
 			}
@@ -129,7 +150,7 @@ Class LogemailDAO {
 		return $this->superdao->getResponse();
 	}
 	//deletar
-	function deletar (Logemail $obj) {
+	function deletar (log_email $obj) {
 		$this->superdao->resetResponse();
 
 		// buscando por dependentes
@@ -139,7 +160,7 @@ Class LogemailDAO {
 			return $this->superdao->getResponse();
 		}
 
-		$this->sql = sprintf("DELETE FROM logemail WHERE id = %d",
+		$this->sql = sprintf("DELETE FROM log_email WHERE id = %d",
 			mysqli_real_escape_string($this->con, $obj->getId()));
 		$result = mysqli_query($this->con, $this->sql);
 
@@ -156,7 +177,7 @@ Class LogemailDAO {
 
 	//quantidade total
 	function qtdTotal() {
-		$this->sql = "SELECT count(*) as quantidade FROM logemail";
+		$this->sql = "SELECT count(*) as quantidade FROM log_email";
 		$result = mysqli_query ( $this->con, $this->sql );
 		if (! $result) {
 			die ( '[ERRO]: ' . mysqli_error ( $this->con ) );

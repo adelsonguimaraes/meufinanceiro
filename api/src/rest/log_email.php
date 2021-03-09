@@ -1,5 +1,5 @@
 <?php
-// rest : logemail
+// rest : log_email
 
 /*
 	Projeto: INCUBUS - Gestão de Consultoria de Vendas.
@@ -33,7 +33,7 @@ switch ($_POST['metodo']) {
 
 function cadastrar () {
 	$data = $_POST['data'];
-	$obj = new Logemail(
+	$obj = new log_email(
 		NULL,
 		$data['idclasse'],
 		$data['classe'],
@@ -43,24 +43,24 @@ function cadastrar () {
 		$data['status'],
 		$data['retorno']
 	);
-	$control = new LogemailControl($obj);
+	$control = new log_email_control($obj);
 	$response = $control->cadastrar();
 	echo json_encode($response);
 }
 function buscarPorId () {
 	$data = $_POST['data'];
-	$control = new LogemailControl(new Logemail($data['id']));
+	$control = new log_email_control(new log_email($data['id']));
 	$response = $control->buscarPorId();
 	echo json_encode($response);
 }
 function listar () {
-	$control = new LogemailControl(new Logemail);
+	$control = new log_email_control(new log_email);
 	$response = $control->listar();
 	echo json_encode($response);
 }
 function atualizar () {
 	$data = $_POST['data'];
-	$obj = new Logemail(
+	$obj = new log_email(
 		$data['id'],
 		$data['idclasse'],
 		$data['classe'],
@@ -70,15 +70,15 @@ function atualizar () {
 		$data['status'],
 		$data['retorno']
 	);
-	$control = new LogemailControl($obj);
+	$control = new log_email_control($obj);
 	$response = $control->atualizar();
 	echo json_encode($response);
 }
 function deletar () {
 	$data = $_POST['data'];
-	$banco = new Logemail();
+	$banco = new log_email();
 	$banco->setId($data['id']);
-	$control = new LogemailControl($banco);
+	$control = new log_email_control($banco);
 	echo json_encode($control->deletar());
 }
 

@@ -26,6 +26,12 @@ Class movimento_control {
 	function buscarPorId () {
 		return $this->objDAO->buscarPorId($this->obj);
 	}
+	function buscarPorNome ($nome) {
+		return $this->objDAO->buscarPorNome ($nome);
+	}
+	function getTotalMes ($idusuario, $data_corrente, $tipo='PAGAMENTO') {
+		return $this->objDAO->getTotalMes($idusuario, $data_corrente, $tipo);
+	}
 	function listar ($idusuario) {
 		return $this->objDAO->listar($idusuario);
 	}
@@ -34,6 +40,9 @@ Class movimento_control {
 	}
 	function listarPorMesAno ($idusuario, $data) {
 		return $this->objDAO->listarPorMesAno ($idusuario, $data);
+	}
+	function listarPorDiasVencimento ($dias_para_vencer) {
+		return $this->objDAO->listarPorDiasVencimento ($dias_para_vencer) ;
 	}
 	function desativar ($idagenda) {
 		return $this->objDAO->desativar($idagenda);
