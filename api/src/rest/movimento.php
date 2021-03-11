@@ -203,7 +203,7 @@ function movimento_listarPorMesAno () {
 
 function movimento_listarPorDiasVencimento () {
 	$control = new movimento_control();
-	$dias_para_vencer = 7;
+	$dias_para_vencer = 5;
 	$dias_atraso = -3;
 
 	$resp = $control->listarPorDiasVencimento($dias_para_vencer); // faltam 5 dias para vencer
