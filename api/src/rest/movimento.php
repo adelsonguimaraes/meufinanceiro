@@ -205,7 +205,9 @@ function movimento_listarPorDiasVencimento () {
 	$control = new movimento_control();
 	$dias_para_vencer = 5;
 	$dias_atraso = -3;
+	$vencendo_hoje = 0;
 
+	// movimentos que vencem em 5 dias
 	$resp = $control->listarPorDiasVencimento($dias_para_vencer); // faltam 5 dias para vencer
 	if (!$resp['success']) die (json_encode($resp));
 	$lista = $resp['data'];
@@ -248,9 +250,54 @@ function movimento_listarPorDiasVencimento () {
 		}
 	}
 
+	// verificando movimentos que vencem no dia atual
+	$resp = $control->listarPorDiasVencimento($vencendo_hoje); // vencem hoje
+	if (!$resp['success']) die (json_encode($resp));
+	$lista = $resp['data'];
+	
+	if (!empty($lista)) {
+		$usuarios = array();
+		foreach($lista as $key) {
+			$index = array_search($key['idusuario'], array_column($usuarios, 'idusuario'));
+			if ($index===false) {
+				array_push(
+					$usuarios,
+					array(
+						"idusuario" => $key['idusuario'],
+						"nome" => $key['usuario'],
+						"email" => $key['email'],
+						"vencimento" => $key['data_corrente'],
+						"movimentos" => array()
+					)
+				);
+				$index = array_search($key['idusuario'], array_column($usuarios, 'idusuario'));
+			}
+			array_push($usuarios[$index]['movimentos'], array(
+				"nome" => $key['nome'],
+				"valor" => $key['valor_mensal']
+			));
+		}
+
+		foreach ($usuarios as $data) {
+			// enviando email informando vencimentos
+			require_once "../email/aviso_movimento_vencimento.php";
+			$html = ob_get_contents();
+			ob_end_clean();
+	
+			$obj = new EnviaEmail();
+			$obj->setRemetente('Meu Financeiro')
+			->setAssunto('Aviso de Vencimento ' . formatDate($data['vencimento'])) 
+			->setEmails(array($data['email']))
+			->setMensagem($html);
+			$obj->enviar();
+		}
+	}
+
+	// movimentos atrasados a 3 dias
 	$resp = $control->listarPorDiasVencimento($dias_atraso); // atrasados a 3 dias
 	if (!$resp['success']) die (json_encode($resp));
 	$lista = $resp['data'];
+	
 
 	if (!empty($lista)) {
 		$usuarios = array();
