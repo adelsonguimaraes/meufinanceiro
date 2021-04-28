@@ -500,7 +500,7 @@ Class movimento_dao {
 		AND (
 			(
 				DATE_FORMAT(m.data_inicial, '%Y%m') <= DATE_FORMAT(CURDATE(), '%Y%m')
-				AND DATE_FORMAT(DATE_ADD(m.data_inicial, INTERVAL m.quantidade_parcela MONTH), '%Y%m') >= DATE_FORMAT(CURDATE(), '%Y%m')
+				AND DATE_FORMAT(DATE_ADD(m.data_inicial, INTERVAL (m.quantidade_parcela-1) MONTH), '%Y%m') >= DATE_FORMAT(CURDATE(), '%Y%m')
 			) OR
 			(
 				DATE_FORMAT(m.data_inicial, '%Y%m') <= DATE_FORMAT(CURDATE(), '%Y%m')
