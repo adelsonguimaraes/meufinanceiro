@@ -116,7 +116,7 @@ function movimento_listarPorMesAno () {
 
 	// montando o obj
 	$obj = new movimento();
-	if (intval($resp['data']['id']>0)) $obj->setId($resp['data']['id']);
+	if (intval($resp['data']['id'])>0) $obj->setId($resp['data']['id']);
 	$obj->setIdusuario($usuario['idusuario']);
 	$obj->setIdcartao('null');
 	$obj->setNome(empty($resp['data']['nome']) ? $nome : $resp['data']['nome']);
