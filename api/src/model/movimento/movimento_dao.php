@@ -275,10 +275,13 @@ Class movimento_dao {
 		-- DATA FINAL >= DATA CORRENTE
 		-- OU PARCELA = 0
 		AND (
-			DATE_FORMAT( DATE_ADD( m.data_inicial, INTERVAL m.quantidade_parcela MONTH ), '%Y%m') >=
+			DATE_FORMAT( DATE_ADD( m.data_inicial, INTERVAL (m.quantidade_parcela-1) MONTH ), '%Y%m') >=
 			DATE_FORMAT( '{$data_corrente}', '%Y%m')
 			OR m.quantidade_parcela = 0
 		)";
+
+		// echo $sql;
+		// exit;
 
 		$result = mysqli_query ( $this->con, $sql );
 		$this->superdao->resetResponse();
@@ -378,6 +381,7 @@ Class movimento_dao {
 					if ($atrasados>0) $status = "ATRASADO";
 					$row['status'] = $status;
 					$row['valor'] = (empty($movimentos)) ? 0 : $movimentos[0]['total_pagamento'];
+					$row['valor'] = round($row['valor'], 2);
 					array_push( $lista, $row);
 				}
 			}

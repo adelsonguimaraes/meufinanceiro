@@ -99,15 +99,21 @@ function movimento_listarPorMesAno () {
 	// atualizando saldo do mes anterior
 	// -- consulta o total do saldo anterior
 	$data_anterior = Date("Y-m-d", strtotime("{$data['data']} -1 Month"));
+	
 	$control = new movimento_control();
 	$resp = $control->getTotalMes ($usuario['idusuario'], $data_anterior, 'PAGAMENTO');
 	if (!$resp['success']) die (json_encode($resp));
 	$total_pagamento_anterior = $resp['data'];
+	
 
 	$resp = $control->getTotalMes ($usuario['idusuario'], $data_anterior, 'RECEBIMENTO');
 	if (!$resp['success']) die (json_encode($resp));
 	$total_recebimento_anterior = $resp['data'];
 	$total_liquido_anterior = round($total_recebimento_anterior-$total_pagamento_anterior);
+
+	// echo $total_pagamento_anterior . "<br>";
+	// echo $total_recebimento_anterior;
+	// exit;
 
 	// --- verificando se o movimento referente a saldo já existe
 	$nome = "SALDO " . getNomeMes(intval(substr($data_anterior, 5, 2))-1)['abreviatura'];
@@ -175,18 +181,24 @@ function movimento_listarPorMesAno () {
 			}
 			// somando o valor mensal
 			$cards[$index]['valor_pago'] += $key['valor_pago'];
+			$cards[$index]['valor_pago'] = round($cards[$index]['valor_pago'], 2);
 			// $cards[$index]['valor_mensal'] += ($key['valor_pago']>0) ? $key['valor_pago'] : $key['valor_mensal'];
 			$cards[$index]['valor_mensal'] += $key['valor_mensal'];
+			$cards[$index]['valor_mensal'] = round($cards[$index]['valor_mensal']);
+
 			array_push($cards[$index]['movimentos'], $key);
 		}else{
 			$obj = $key;
 			// $obj['valor_mensal'] = ($key['valor_pago']>0) ? $key['valor_pago'] : $key['valor_mensal'];
-			$obj["total_recebimento"] = $movimentos[0]['total_recebimento'];
-			$obj["total_pagamento"] = $movimentos[0]['total_pagamento'];
-			$obj["total_liquido"] = $movimentos[0]['total_liquido'];
+			$obj["total_recebimento"] = round($movimentos[0]['total_recebimento'], 2);
+			$obj["total_pagamento"] = round($movimentos[0]['total_pagamento'], 2);
+			$obj["total_liquido"] = round($movimentos[0]['total_liquido'], 2);
 			array_push($movs, $obj);
 		}
 	}
+
+	// var_dump($cards);
+	// exit;
 
 	// mescando os movimentos e os cartões
 	$movimentos = array_merge($movs, $cards);
@@ -251,47 +263,47 @@ function movimento_listarPorDiasVencimento () {
 	}
 
 	// verificando movimentos que vencem no dia atual
-	// $resp = $control->listarPorDiasVencimento($vencendo_hoje); // vencem hoje
-	// if (!$resp['success']) die (json_encode($resp));
-	// $lista = $resp['data'];
+	$resp = $control->listarPorDiasVencimento($vencendo_hoje); // vencem hoje
+	if (!$resp['success']) die (json_encode($resp));
+	$lista = $resp['data'];
 	
-	// if (!empty($lista)) {
-	// 	$usuarios = array();
-	// 	foreach($lista as $key) {
-	// 		$index = array_search($key['idusuario'], array_column($usuarios, 'idusuario'));
-	// 		if ($index===false) {
-	// 			array_push(
-	// 				$usuarios,
-	// 				array(
-	// 					"idusuario" => $key['idusuario'],
-	// 					"nome" => $key['usuario'],
-	// 					"email" => $key['email'],
-	// 					"vencimento" => $key['data_corrente'],
-	// 					"movimentos" => array()
-	// 				)
-	// 			);
-	// 			$index = array_search($key['idusuario'], array_column($usuarios, 'idusuario'));
-	// 		}
-	// 		array_push($usuarios[$index]['movimentos'], array(
-	// 			"nome" => $key['nome'],
-	// 			"valor" => $key['valor_mensal']
-	// 		));
-	// 	}
+	if (!empty($lista)) {
+		$usuarios = array();
+		foreach($lista as $key) {
+			$index = array_search($key['idusuario'], array_column($usuarios, 'idusuario'));
+			if ($index===false) {
+				array_push(
+					$usuarios,
+					array(
+						"idusuario" => $key['idusuario'],
+						"nome" => $key['usuario'],
+						"email" => $key['email'],
+						"vencimento" => $key['data_corrente'],
+						"movimentos" => array()
+					)
+				);
+				$index = array_search($key['idusuario'], array_column($usuarios, 'idusuario'));
+			}
+			array_push($usuarios[$index]['movimentos'], array(
+				"nome" => $key['nome'],
+				"valor" => $key['valor_mensal']
+			));
+		}
 
-	// 	foreach ($usuarios as $data) {
-	// 		// enviando email informando vencimentos
-	// 		require_once "../email/aviso_movimento_vencimento.php";
-	// 		$html = ob_get_contents();
-	// 		ob_end_clean();
+		foreach ($usuarios as $data) {
+			// enviando email informando vencimentos
+			require_once "../email/aviso_movimento_vencimento.php";
+			$html = ob_get_contents();
+			ob_end_clean();
 	
-	// 		$obj = new EnviaEmail();
-	// 		$obj->setRemetente('Meu Financeiro')
-	// 		->setAssunto('Aviso de Vencimento ' . formatDate($data['vencimento'])) 
-	// 		->setEmails(array($data['email']))
-	// 		->setMensagem($html);
-	// 		$obj->enviar();
-	// 	}
-	// }
+			$obj = new EnviaEmail();
+			$obj->setRemetente('Meu Financeiro')
+			->setAssunto('Aviso de Vencimento ' . formatDate($data['vencimento'])) 
+			->setEmails(array($data['email']))
+			->setMensagem($html);
+			$obj->enviar();
+		}
+	}
 
 	// movimentos atrasados a 3 dias
 	$resp = $control->listarPorDiasVencimento($dias_atraso); // atrasados a 3 dias
