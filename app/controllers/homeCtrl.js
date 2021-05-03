@@ -21,11 +21,11 @@ angular.module(module).controller('homeCtrl', function ($rootScope, $scope, auth
     }
 
     // scrollando a timeline com o mouse scroll
-    $timeout(()=>{
-        document.querySelector('div .timeline-mes').addEventListener('wheel', (e)=>{
-            document.querySelector('div .timeline-mes').scrollLeft += e.deltaY*2;
-        });
-    }, 1000);
+    // $timeout(()=>{
+    //     document.querySelector('div .timeline-mes').addEventListener('wheel', (e)=>{
+    //         document.querySelector('div .timeline-mes').scrollLeft += e.deltaY*2;
+    //     });
+    // }, 1000);
 
     // totais
     $scope.total = {
